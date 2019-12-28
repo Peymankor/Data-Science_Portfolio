@@ -1,0 +1,192 @@
+---
+title: 'Assignment #4'
+author: "Peyman Kor"
+date: "11/28/2019"
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+---
+
+#4.1
+
+```{r}
+library(tidyverse)
+data <- read.csv('A4_Kulhuse.csv')
+head(data)
+```
+Now, let's have alook on the data for possible "NA" values,
+
+```{r}
+data_fil <- data %>% filter(is.na(Sal))
+```
+
+We see that the column Salinity has 111 rows whcih are NA, also we could see other columns as well are NA, so could safely removes these 111 rows beacuse they contain no information. 
+
+```{r}
+data_nona <- data %>% filter(!is.na(Sal))
+```
+
+Having this now, we visulize the Salinity versus time:
+
+```{r}
+library(ggplot2)
+data_nona %>% mutate(Date = as.Date(DateTime)) %>% 
+  ggplot(mapping = aes(Date,Sal)) +
+  geom_point() +
+  scale_x_date(date_minor_breaks = "1 day ",date_labels = "%b %d") +
+  stat_smooth(
+  color = "#FC4E07",
+  method = "loess"
+  )
+```
+
+
+```{r}
+library(ggplot2)
+data_nona %>% mutate(Date = as.Date(DateTime)) %>% 
+  ggplot(mapping = aes(Date,ODO)) +
+  geom_point() +
+  scale_x_date(date_minor_breaks = "1 day ",date_labels = "%b %d") +
+  stat_smooth(
+  color = "#FC4E07",
+  method = "loess"
+  )
+```
+
+
+
+
+# 4.2
+
+The salinity assumed to be random walk process as the follow:
+
+$$X_{t} = X_{t-1} + \eta_{t}$$
+$$Y_{t} = X_{t} + \epsilon_{t}$$
+
+So, the following is the state space model for salinity, where the $\eta_{t}$ and $\epsilon_{t}$ are the white noise with the standard deviation of $\sigma_{\eta}$ and $\sigma_{\epsilon}$.
+
+On the other hand, the salinity could be written as the ARIMA process (0,1,1) as the follow:
+
+$$Y_{t}-Y_{t-1} = \eta_{t} + \epsilon_{t}-\epsilon_{t-1}$$
+
+In the state space model as the matrix,
+
+$$X_t=AX_{t-1} + G\epsilon_{t}$$
+$$Y =CX_t$$
+
+Where the $A=C=1$
+
+
+
+
+# 4.3
+
+
+```{r}
+library(FKF)
+y <- data_nona$Sal
+dt <- ct <- matrix(0)
+Zt <- Tt <- matrix(1)
+a0 <- y[1] # Estimation of the first year flow
+P0 <- matrix(0.01) # Variance of 'a0'
+fit.fkf <- optim(c(HHt = 0.01 ,
+                   GGt = 0.005 ),
+                 fn = function(par, ...)
+                   -fkf(HHt = matrix(par[1]), GGt = matrix(par[2]), ...)$logLik,
+                 yt = rbind(y), a0 = a0, P0 = P0, dt = dt, ct = ct,
+                 Zt = Zt, Tt = Tt)
+## Filter Nile data with estimated parameters:plot.fkf 7
+fkf.obj <- fkf(a0, P0, dt, ct, Tt, Zt, HHt = matrix(fit.fkf$par[1]),
+               GGt = matrix(fit.fkf$par[2]), yt = rbind(y))
+```
+
+
+```{r}
+plot(y)
+with(fkf.obj, matlines((at[1,]) + cbind(0,-1.96*sqrt(Pt[1,1,]),1.96*sqrt(Pt[1,1,])),type="l", lty=c(1,2,2), col=2))
+legend("bottom", c("Salinity Data", "Estimation and Confidence Interval"),
+       col = c("black", "red"), lty = 1)
+```
+
+
+
+```{r}
+plot(y, main = "Treering data")
+lines(ts(fkf.obj$att[1, ], start = start(y), frequency = frequency(y)), col = "blue")
+```
+
+```{r}
+prediction <- fkf.obj$att[1, ]
+error <- abs(y-prediction)
+norm_err <- error/sd(prediction)
+plot(norm_err)
+```
+
+
+
+
+
+```{r}
+plot(y[800:950], main = "Treering data")
+lines(ts(fkf.obj$att[1, ][800:950], start = start(y), frequency = frequency(y)), col = "blue")
+```
+
+```{r}
+prediction <- fkf.obj$att[1, ]
+error <- abs(y-prediction)
+norm_err <- error/sd(prediction)
+plot(norm_err[800:950])
+```
+
+```{r}
+prediction[4889]
+```
+
+
+
+
+# 4 
+
+```{r}
+sd_pre <- sd(prediction)
+sum(abs(prediction-y) > 6*sd_pre)
+```
+
+
+
+# 5
+
+```{r}
+y <- data_nona$Sal[1:800]
+dt <- ct <- matrix(0)
+Zt <- Tt <- matrix(1)
+a0 <- y[1] # Estimation of the first year flow
+P0 <- matrix(0.01) # Variance of 'a0'
+fit.fkf <- optim(c(HHt = 0.0 ,
+                   GGt = 0.005 ),
+                 fn = function(par, ...)
+                   -fkf(HHt = matrix(par[1]), GGt = matrix(par[2]), ...)$logLik,
+                 yt = rbind(y), a0 = a0, P0 = P0, dt = dt, ct = ct,
+                 Zt = Zt, Tt = Tt)
+
+fit.fkf$par
+```
+
+
+
+```{r}
+fkf.obj1 <- fkf(a0, P0, dt, ct, Tt, Zt, HHt = matrix(fit.fkf$par[1]),
+               GGt = matrix(fit.fkf$par[2]), yt = rbind(y))
+plot(y, main = "Salinity data")
+lines(ts(fkf.obj1$att[1, ], start = start(y), frequency = frequency(y)), col = "blue")
+
+```
+
+```{r}
+plot(data_nona$Sal[800:950], main = "Salinity data")
+lines(ts(fkf.obj1$att[1, ], start = start(y), frequency = frequency(y)), col = "blue")
+```
+
+
+

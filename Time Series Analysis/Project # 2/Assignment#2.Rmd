@@ -1,0 +1,267 @@
+---
+title: "Assignment#2"
+author: "Peyman Kor"
+date: "10/24/2019"
+output: pdf_document
+---
+
+# Question 2.1
+
+The process can be written as:
+
+
+$$(1-0.8B)X_{t} = (1+0.8B - 0.5B^{2})\epsilon_{t}$$
+##1
+
+### Stationary:
+
+$$\phi(z^{-1}) = 1- 0.8z^{-1}=0$$
+The roots of this equation :
+
+$$z-0.8=0$$
+$$z=0.8$$
+The z value is lower than a unit circle therifere the process is *staionary*.
+
+
+### Invertibility
+
+$$\theta(z^{-1}) = 1+ 0.8z^{-1} -0.5z^{-2}=0$$
+The roots of this equation :
+
+$$z^{2} + 0.8z-0.5=0 $$
+$$z_{1}= 0.41$$
+$$z_{2} = -1.21$$
+The $z_{2}$ does no lie in the unit circle, so the process is not invertible.
+
+##2
+
+The mean of ARMA model (p,q) can be written as:
+
+$$E[X_{t}]=0.8E[X_{t-1}]+E[\epsilon_{t}]+0.8E[\epsilon_{t-1}] -0.5E[\epsilon_{t-2}]$$
+Since, staionary, the$E[X_{t}]=E[X_{t-1}]$ and the white noise, $\mu=0$
+$$E[X_{t}]=0.8E[X_{t}] + 0$$
+$$E[X_{t}]=0$$
+
+The autocovariance for the ARMA(p,q) process, can be written as:
+
+
+
+
+$$\gamma_{\epsilon X}(0) = \sigma^{2}=0.16$$
+$$\gamma_{\epsilon X}(1) =(\theta_{1}-\phi_{1}) \sigma^{2}=(0.8+0.8)*0.16=0.256$$
+$$\gamma_{\epsilon X}(2) =-\phi_{1}\gamma_{\epsilon X}(1)+\theta_{2}\sigma^2 =+0.8*0.256 -0.5*0.16= -0.12$$
+
+
+Now based on Eq (5-101):
+
+$$\gamma(0)+\phi_{1}\gamma(1)= \gamma_{\epsilon X}(0) +\theta_{1}\gamma_{\epsilon X}(1) +
+\theta_{2}\gamma_{\epsilon X}(2)$$
+
+
+$$\gamma(1)+\phi_{1}\gamma(0)= \theta_{1}\gamma_{\epsilon X}(0) +
+\theta_{2}\gamma_{\epsilon X}(1)$$
+
+Threfore,
+
+$$\gamma(1)= \frac{\gamma(0)(\theta_{1}-\phi_{1})}{1-\theta_{2}}$$
+
+$$\gamma(0)= \frac{\gamma_{\epsilon X}(0) +\theta_{1}\gamma_{\epsilon X}(1) +\theta_{2}\gamma_{\epsilon X}(2)}{1 + \frac{\theta_{1}-\phi_{1}}{1-\theta_{2}}\phi_{1}}$$
+
+$$\gamma(0)= \frac{0.16 +0.8*0.256 +0.5*0.28}{1 + \frac{0.8+0.8}{1+0.5}*-0.8}=\frac{0.50}{0.14}=3.4$$
+$$\gamma(1)= \frac{\gamma(0)*(\theta1-\phi1)}{1-\theta2}=\frac{3.4*(0.8+0.8)}{1+0.5}=3.63$$
+ The Varinace is:
+ $$\sigma^{2}=\gamma(0)= 3.4$$
+## 3
+
+```{r}
+sim1 <- replicate(10,arima.sim(model = list(ar=c(0.8),ma=c(0.8,-0.5), order=c(1,0,2)), n = 500 ,sd=0.4))
+matplot(sim1, lty=1, type="l", col=rainbow(11))
+```
+
+```{r}
+sim1acf <- acf(sim1, plot = F)
+simacf <- sim1acf$acf
+dataset <- cbind(simacf[,1,1],simacf[,2,2],simacf[,3,3],simacf[,4,4],simacf[,5,5],simacf[,6,6],simacf[,7,7],simacf[,8,8],simacf[,9,9],simacf[,10,10])
+matplot(dataset, lty=1, type="h", col=rainbow(11), ylim = c(0,1))
+
+```
+
+```{r}
+sim1pacf <- pacf(sim1, plot = F)
+simpacf <- sim1pacf$acf
+datasetpcaf <- cbind(simpacf[,1,1],simpacf[,2,2],simpacf[,3,3],simpacf[,4,4],simpacf[,5,5],simpacf[,6,6],simpacf[,7,7],simpacf[,8,8],simpacf[,9,9],simpacf[,10,10])
+matplot(datasetpcaf, lty=1, type="h", col=rainbow(11), ylim = c(0,1))
+```
+
+```{r}
+col_variance <- apply(sim1,2,var)
+plot(col_variance, type = 'h')
+```
+
+
+
+
+
+# Question 2.2
+
+
+Considering the $Y-\mu = Z_{t}$ , we have:
+
+$$(1-1.04B +0.2B^{2})(1-0.86B^{4})(Z_{t}) = (1-0.42B^{4})\epsilon$$
+Multyplying the polonomyal terms:
+
+$$(1-0.86B^{4}-1.04B+0.89B^{5} + 0.2B^{2} - 0.17B^{6})Z_{t}=(1-0.42B^{4})\epsilon_{t}$$
+
+Reordering the terms:
+
+$$\varphi(B)=1-1.04B+0.2B^{2}-0.86B^{4}+0.89B^{5}-0.17B^{6}$$
+ Using the conditional term, we have:
+ 
+ $$Y_{t+1|t} = 1.04Z_{t} - 0.2Z_{t-1}+0.86Z_{t-3} - 0.89Z_{t-4}+0.17Z_{t-5}$$
+
+```{r}
+data <- read.delim('A2_sales.txt', sep = "")
+data['Z_t'] <- data['Sales']-2070
+data
+```
+
+$$Z_{2019Q1|2018K4} = 1.04*18 -0.2*189$$
+$$+ 0.86*281-0.89*307 +0.17*462$$  
+$$=28$$
+Therefore, the $$Y_{t}=2070+28=2098$$
+
+95 % prediction interval is:
+
+$$ 2098 (+)(-) 1.96*200 = [1706,2490]$$
+
+ $$Y_{t+1|t} = 1.04Z_{t+1|t} - 0.2Z_{t}+0.86Z_{t-2} - 0.89Z_{t-3}+0.17Z_{t-4}$$
+
+
+$$Z_{2019Q2|2019Q1} = 1.04*28 -0.2*18$$
+$$+ 0.86*315-0.89*281 +0.17*307$$  
+$$=99$$
+Therefore, the $$Y_{t}=2070+99=2169$$
+
+95 % prediction interval is:
+
+$$ 2169 (+)(-) \sqrt(1+1.04^2)*1.96*200 =$$ 
+$$[2169-565,2169+565]$$
+$$[1604,2734]$$
+```{r}
+prediction <- data.frame(Quarter=c("2019Q1","2019Q2"), Sales = c(2098,2169),Z_t=c(28,99))
+past_prediction <- rbind(data, prediction)
+past_prediction[,'Quartern'] <- as.character(past_prediction$Quarter)
+newxaxis <- as.character(past_prediction$Quarter)
+```
+
+
+```{r}
+vardatf <- data.frame(Quarter = c("2019Q1","2019Q2"), Sales=c(1706,1604))
+past_prediction[21,'lower'] <- 2000
+past_prediction[21,'Upper'] <- 2100
+past_prediction[22,'lower'] <- 2100
+past_prediction[22,'Upper'] <- 2300
+library(tidyverse)
+gg <- ggplot(past_prediction, aes(Quarter,Sales))  
+gg <- gg+geom_point() 
+gg <- gg+geom_line(data=vardatf,aes(x=Quarter,y=Sales)) 
+gg <- gg + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+gg
+```
+
+
+
+
+
+# Question 2.3
+
+
+## Roots:
+Calculation of the roots of the $\phi(Z^{-1}):$
+ 
+For the first value of the $\phi2:$
+```{r}
+polyroot(rev(c(1,-1.5,0.52)))
+```
+For the second value of the $\phi2:$
+
+
+```{r}
+polyroot(rev(c(1,-1.5,0.98)))
+```
+
+
+
+## Histogram
+
+
+```{r}
+estphi <- function(phi2,sd) {
+  phi2 <- phi2
+  sd <- sd
+  estimatephi2 <- rep(0,100) 
+  estimatephi1 <- rep(0,100)
+
+  for (i in 1:100){
+    sim1 <- arima.sim(model = list(ar=c(1.5,phi2), order=c(2,0,0)), n = 300, sd=sd)
+    arima200 <- arima(sim1, order = c(2,0,0)) # May give a warning due to unit root
+    estimatephi2[i] <- arima200$coef[2]
+    estimatephi1[i] <- arima200$coef[1]
+  }
+  estph12 <- data.frame(estimatephi1,estimatephi2)
+  return(estph12)
+}
+
+par(mfrow=c(2,2))
+Hist_Proces1 <- estphi(-0.52,0.1)
+hist(Hist_Proces1$estimatephi2, breaks = 10, main = 'ph2 =0.52, sd=0.1')
+abline(v=quantile(Hist_Proces1$estimatephi2,0.95))
+var(Hist_Proces1$estimatephi2)
+mtext("0.002",4)
+
+
+Hist_Proces2 <- estphi(-0.52,5)
+hist(Hist_Proces2$estimatephi2, breaks = 10,main='ph2 =0.52, sd=5')
+abline(v=quantile(Hist_Proces2$estimatephi2,0.95))
+var(Hist_Proces2$estimatephi2)
+mtext("0.002",4)
+
+
+
+Hist_Proces3 <- estphi(-0.98,0.1)
+hist(Hist_Proces3$estimatephi2, breaks = 10,main='ph2 =0.98, sd=0.1')
+abline(v=quantile(Hist_Proces3$estimatephi2,0.95))
+var(Hist_Proces3$estimatephi2)
+mtext("0.00017",4)
+
+
+
+Hist_Proces4 <- estphi(-0.98,5)
+hist(Hist_Proces4$estimatephi2, breaks = 10,main='ph2 =0.98, sd=5')
+abline(v=quantile(Hist_Proces4$estimatephi2,0.95))
+var(Hist_Proces4$estimatephi2)
+mtext("0.00018",4)
+
+
+
+
+```
+
+
+As we can see from the above plot, change in $\phi2$:
+
+dramatically change the variance of the paramter estimation, as we can see on the two figure in the first column, the chnage of the $\phi2$ decreased the variance in theorder of ten times.
+
+On the other hand:
+
+We can see that even change in the $\sigma^{2}$ has a negligible effect on the estimate of variance of estimation of the parameter.
+```{r}
+all4 <- rbind(Hist_Proces1,Hist_Proces2,Hist_Proces3,Hist_Proces4)
+plot(all4$estimatephi1,all4$estimatephi2)
+points(1.5,-0.52, col='red', cex=1,pch=19)
+points(1.5,-0.98, col='red', cex=1,pch=19)
+
+```
+
+
+We see the declining trend. So, as the estimation of $\phi_{1}$ increases, the estimate of the $\phi2$ decrrases.  Threfore, the trend of these two parameters works in the opposite way.

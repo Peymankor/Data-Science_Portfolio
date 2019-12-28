@@ -1,0 +1,334 @@
+---
+title: "Assignment#3"
+author: "Peyman Kor"
+date: "11/1/2019"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Question 3.1 Plotting
+
+The data set is divided to two sets. From the beginning until the beginning of the 2018 is considered as the **Train** Data set and from Jan 2018 beyond is considered the **Test** data-set.
+
+```{r}
+suppressMessages(library(tidyverse))
+suppressMessages(library(forecast))
+suppressMessages(library(car))
+
+data <- read.csv('A3_co2.txt', sep = '')
+data_train <- data[1:718,]
+data_test <- data[719:738,]
+data[1:718,'type'] <- 'train'
+data[719:738, 'type'] <- 'test'
+data['type'] <- as.factor(data$type)
+ggplot(data, aes(time,co2, color=type)) +
+  ylab("CO2 Concentration, ppm") +
+  geom_line()
+```
+
+
+## Question 3.2 Correlation Structure
+
+
+```{r}
+data_train$co2%>% ggtsdisplay(lag.max = 30)
+```
+
+The ACF plot and PACF provides some hints regarding the structure we have here:
+
+First, we can see that the data is obviously strongly seasonal as well non stationary. To deal with this seasonality, we will have look on the seasonal difference for ACF and PACF. However, several seasonal lag is considered to have further look on the data and also, we will then think whether the second difference is needed or we could go the first one, although the clear answer will not be obvious.
+
+Differences with lag = 4
+
+```{r}
+data_train$co2 %>% diff(lag=4) %>% ggtsdisplay()
+```
+
+Differentiating with lag = 8
+
+
+```{r}
+data_train$co2 %>% diff(lag=8) %>% ggtsdisplay()
+```
+Differentiating with lag = 12
+
+
+```{r}
+data_train$co2 %>% diff(lag=12) %>% ggtsdisplay()
+```
+Differentiating with lag = 20
+
+```{r}
+data_train$co2 %>% diff(lag=20) %>% ggtsdisplay()
+```
+
+
+As we can see that the difference helpful for make the dataset more stationary rather than have the trend in the data. Considering this initial analysis, we could argue that perhaps the lag = 12 could provide the more insight about the data than other lag size, however this lag can not fully make the data stationary, yet we stay with first order difference and will try to include the trend in ARIMA model to include a weak trend.
+
+
+```{r}
+data_train$co2 %>% diff(1,lag=12) %>% ggtsdisplay()
+```
+
+A few more points about the above plot is that in the non-seasonal lags, there are three significant spikes in the PACF, suggesting a possible AR(3) term. The pattern in the ACF is not indicative of any simple model.
+
+On the other hand, we could potential utilize the logarithmic transformation of the co2 concentration in order to the levelize the variance of the data and which lead on the minimizing the curvature of the data, although it is not very obvious.
+
+
+```{r}
+dataco2log <- cbind("Co2" = data_train$co2,
+                 "Log_co2"=log(data_train$co2),
+                 'Time'=seq(length(data_train$co2)))
+dataco2log <- as.data.frame(dataco2log)
+dataco2log_tidy=gather(dataco2log, "type", "Co2", 1:2)
+
+p <- ggplot(dataco2log_tidy, aes(Time, Co2)) + geom_line()
+p + facet_grid(rows = vars(type), scales = 'free_y')
+
+```
+
+
+# Question 3.3: Procedure for identifying ARIMA model
+
+The procedure to find the most appropriate model for the data is followed as :
+
+1. First the data is plotted to have overview whether there is any seasonality and non stationary behavior (like trend) in the data set
+2. Then if we see the changing variance, we may use the transformation of the data (like log)
+in order to stabilize the variance
+3. If there is trend is data set, we take the difference until the stationary state appears in the data set
+4. Now, having done some pre cleaning on the data, we evaluate the the ACF and PACF and try to determine the possible candidate model.
+5. After building the model, we perform AICc analysis and take that one as the criteria for best model if the same model order was decided.
+
+Note: Since we are using the forecast package in R, the information criteria is Akaike’s Information Criterion (AIC)
+and we try to minimize the AICc (defined in the forecast pacakege) suitable for ARIMA package.
+
+6. Now, the final criteria for selecting the model would be the ACF of PACF of the residual and also histogram of the residuals in order to make sure that the residual follow the white noise.
+
+7. However, the above is valid for best model considering the train data set, ultimately all candidate models must be feed into the models to see the RMSE values in order to select the the model which goes to the forecast stage.
+
+In summary, the goal is to find the minimum RMSE while make sure the residual follows the white noise distribution.
+
+
+# Question 3.4: ARIMA model
+
+Now having look on ACF and PACF we could say that in non-seasonal lags, there are three significant spikes in the PACF, suggesting a possible AR(3) term. In addition, the seasonal part potentially could be considered with the D=12 and the lag of m=12. Having said that and considering the discussion in the class regarding using the drift to include the linear trend, the initial suggestion would be:
+
+$$ARIMA(3,0,0)(1,1,0)_{12}$$
+Having this model and figuring the AIC and the residual distribution:
+
+```{r}
+library(forecast)
+co2 <- data_train$co2
+(fitnew_1 <- Arima(co2, order=c(3,0,0),seasonal=list(order=c(1,1,0),period=12),
+                 include.drift = T
+              ))
+```
+
+```{r}
+checkresiduals(fitnew_1, lag=36)
+```
+
+Now, considering this assumption, we add the a few variation to this structure while keeping the order of the Arima same, while we change the q,P and Q terms.
+
+$$ARIMA(3,0,1)(0,1,1)_{12}$$
+
+```{r}
+(fitnew_2 <- Arima(co2, order=c(3,0,1),seasonal=list(order=c(0,1,1),period=12),
+                 include.drift = T
+              ))
+```
+
+$$ARIMA(3,0,1)(1,1,1)_{12}$$
+
+```{r}
+(fitnew_3 <- Arima(co2, order=c(3,0,1),seasonal=list(order=c(1,1,1),period=12),
+                 include.drift = T
+              ))
+```
+$$ARIMA(3,0,2)(2,1,0)_{12}$$
+
+
+```{r}
+(fitnew_4 <- Arima(co2, order=c(3,0,2),seasonal=list(order=c(2,1,0),period=12),
+                 include.drift = T
+              ))
+```
+$$ARIMA(3,0,2)(1,1,3)_{12}$$
+
+```{r}
+(fitnew_5 <- Arima(co2, order=c(3,0,2),seasonal=list(order=c(1,1,3),period=12),
+                 include.drift = T
+              ))
+```
+$$ARIMA(3,0,1)(1,1,4)_{12}$$
+
+```{r}
+(fitnew_6 <- Arima(co2, order=c(3,0,1),seasonal=list(order=c(1,1,4),period=12),
+                 include.drift = T
+              ))
+```
+
+Now considering the above evaluation, while the order is the same d=0, D=1, we can see that the fit_2 has the minimum AICc among the models. Now, let's change the order and see what happens if we do not include the linear trend, instead use the difference to the non-seasonal term as well to seasonal term. Now, considering same order, here the AICc is the measure of the quality of model:
+
+$$ARIMA(3,1,0)(1,1,0)_{12}$$
+
+```{r}
+(fitnew_11 <- Arima(co2, order=c(3,1,0),seasonal=list(order=c(1,1,0),period=12)))
+```
+
+$$ARIMA(3,1,2)(0,1,1)_{12}$$
+
+```{r}
+(fitnew_12 <- Arima(co2, order=c(3,1,2),seasonal=list(order=c(0,1,1),period=12)
+              ))
+```
+$$ARIMA(3,1,0)(1,1,2)_{12}$$
+
+```{r}
+(fitnew_13 <- Arima(co2, order=c(3,1,0),seasonal=list(order=c(1,1,2),period=12)
+              ))
+```
+
+$$ARIMA(3,1,2)(0,1,3)_{12}$$
+
+```{r}
+(fitnew_14 <- Arima(co2, order=c(3,1,2),seasonal=list(order=c(0,1,3),period=12)
+              ))
+```
+
+$$ARIMA(3,1,1)(1,1,3)_{12}$$
+
+```{r}
+(fitnew_15 <- Arima(co2, order=c(3,1,1),seasonal=list(order=c(1,1,3),period=12)
+              ))
+```
+$$ARIMA(3,1,1)(1,1,2)_{12}$$
+
+
+```{r}
+(fitnew_16 <- Arima(co2, order=c(3,1,1),seasonal=list(order=c(1,1,2),period=12)
+              ))
+```
+
+
+
+## RMSE and Test set Evaluation:
+
+Now, it should be our understanding that when compare the model forecast with test data set using the metric (RMSE) no matter which order we used, the evaluation is always valid. Therefore, we compare the five models comparing their RMSE to select the final model to go for forecasting.
+
+
+```{r}
+accuracy(forecast(fitnew_1,h=20)$mean, data_test$co2)
+accuracy(forecast(fitnew_5,h=20)$mean, data_test$co2)
+accuracy(forecast(fitnew_12,h=20)$mean, data_test$co2)
+accuracy(forecast(fitnew_16,h=20)$mean, data_test$co2)
+```
+
+Now, see that the model number fitnew_6 has the lowest RMSE among the models, yet at the end we will have look on the residuals and ACF plot of residuals, and if confirm they represent the white noise, the model be considered for prediction.
+
+
+```{r}
+checkresiduals(fitnew_16, lag=30)
+```
+
+So, let's plot the qqplot to make sure that the residual are white noise- As we can see, the models number 1, 12, 16 diverge from the low and high quantiles of the data, but it seems the model number one is more consistent with the extreme quntile of data set.
+
+
+```{r}
+par(mfrow=c(2,2))
+qqPlot(fitnew_1$residuals)
+qqPlot(fitnew_5$residuals)
+qqPlot(fitnew_12$residuals)
+qqPlot(fitnew_16$residuals)
+```
+
+However, since we defined that the RMSE is the final criteria after comparing with the test data, we will continue to work with the model number 16.
+
+## Question 3.5: Predictions
+
+
+```{r}
+prediction <- forecast(fitnew_16,h=48)
+prediction_point <- prediction$mean
+table_pre_test=data_frame(mounth= seq(20),
+                          Test_data = data_test$co2,
+           mean_prediction=prediction_point[1:20],
+           Low_95 = prediction$lower[1:20,2],
+           High_95 = prediction$upper[1:20,2])
+           
+table_pre_test
+```
+
+ We can plot the data for the prediction for next 4 years as :
+ 
+ 
+```{r}
+fitnew_16 %>% forecast(h=48) %>% autoplot()
+```
+ In order to have some visualization, let's plot the mean prediction, 95% confidence interval next 24 mount in one single plot:
+ 
+```{r}
+tidy_pred_test <- gather(table_pre_test, "type", "Co2", 2:5)
+ggplot(tidy_pred_test, aes(mounth,Co2, color=type)) +
+  ylab("CO2 Concentration, ppm") +
+  geom_line()
+```
+ 
+## Question 3.6: Attaining 460 ppm
+
+```{r}
+prediction_460 <- forecast(fitnew_16,h=400)
+table_pre_460=data_frame(mounth= seq(400),
+           mean_prediction=prediction_460$mean,
+           Low_95 = prediction_460$lower[,2],
+           High_95 = prediction_460$upper[,2])
+           
+table_pre_460 
+
+```
+
+```{r}
+tidy_pred_460 <- gather(table_pre_460, "type", "Co2", 2:4)
+ggplot(tidy_pred_460, aes(mounth,Co2, color=type)) +
+  ylab("CO2 Concentration, ppm") +
+  geom_line() +
+  geom_hline(yintercept=460, linetype="dashed", 
+                color = "red")
+```
+
+```{r}
+which(grepl(460, table_pre_460$mean_prediction))
+```
+
+According to mean prediction, the mouth 268 is the first month that the Co2 concentration meet reach the 460 ppm. This 268 is the number of months after the first month of the 2018 therefore we could say:
+
+
+### Mean Point Prediction
+
+number of month = 268 / 12 = 22.3
+
+The year first mean prediction reach the 460 ppm = 2018 + 22.3 = 2040.3
+
+### 95 % Interval:
+
+#### Lower
+
+number of month = 208 / 12 = 17.3
+
+The year first mean prediction reach the 460 ppm = 2018 + 17.3 = 2035.3
+
+
+#### Higher
+
+number of month = 388 / 12 = 32.3
+
+The year first mean prediction reach the 460 ppm = 2018 + 32.3 = 2050.3
+
+
+
+
+## References
+
+* Madsen, Henrik. Time series analysis. Chapman and Hall/CRC, 2007.
+* Hyndman, R.J., & Athanasopoulos, G. (2018) Forecasting: principles and practice, 2nd edition, OTexts: Melbourne, Australia. OTexts.com/fpp2 
