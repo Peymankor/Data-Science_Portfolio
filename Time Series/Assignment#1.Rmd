@@ -1,0 +1,116 @@
+---
+title: "Assignment#1"
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+---
+
+
+```{r}
+#install.packages('tidyverse')
+library(tidyverse)
+```
+
+Here, the data set was imported. Then, the dataset was divided as the assignment requested and and the estimate data and the test data in two different color has been plotted.
+
+```{r}
+DATA <- read.csv('A1_co2.txt',sep = '')
+
+DATA_est <-  DATA %>% 
+  filter(year !=2019 & year !=2018) %>% 
+  mutate(Type='estimate')
+#tail(DATA_estimate)
+DATA_test <- DATA %>% 
+  filter(year ==2019 | year ==2018) %>% 
+  mutate(Type='test')
+
+DATA_est_tes <- bind_rows(DATA_est,DATA_test)
+
+#
+ggplot(data = DATA_est_tes,aes(x=time,y=co2)) +
+  geom_jitter(aes(colour = Type))
+# tail(Data)
+```
+
+The lm function was used here in order to perform the Ordinary Least Sqaure based on the the training data set provide in the previous section.
+
+
+
+```{r}
+p <- 365
+#x <- cbind(1,DATA_est$time,sin(2*pi*DATA_est$time/p),cos(2*pi*DATA_est$time/p))
+
+lm1 <- lm(co2 ~ time + I(sin(2*pi*time/p)) + I(cos(2*pi*time/p)), data=DATA_est) ## Notice the I(...) to get what is calculated instead of interaction
+```
+
+Here, the estimated parameters and as well the standard deviation of each parameters (4 in this case) were estimated.
+
+```{r}
+sum_param=summary(lm1)$coefficient
+row.names(sum_param) <- c('alpha','beta_t','beta_s','beta_c')
+sum_param
+```
+
+Plot of the data Vs. Fitted values based on Ordinary Least Sqaure:
+
+```{r}
+DATA_est$fit <- lm1$fitted.values
+plot(co2~time, DATA_est)
+lines(fit~time, DATA_est, type="l", lwd=5, col = "blue")
+legend("bottomright", legend = c("Observed","Fitted"), col = c('black','blue'), pch=c(1,NA), lty=c(NA,1))
+```
+
+
+
+here, the algorithem was provided in order to ro estimate the rho values after 5 iterations. At the end, the plot of the WLS method based on the estimated paramters (after 5 iteraions) were plotted:
+
+```{r}
+x <- cbind(1,DATA_est$time,sin(2*pi*DATA_est$time/p),cos(2*pi*DATA_est$time/p))
+sigma <-  diag(718)
+Y <- DATA_est$co2 
+theta_relax <- c()
+for (k in 1:5){
+        theta_relax <-  solve((t(x)%*%solve(sigma)%*%x))%*%t(x)%*%solve(sigma)%*%Y
+               Y_hat <-  x%*%theta_relax
+               res <-  DATA_est$co2 - Y_hat
+               res1 <-  res[1:718-1]
+               res2 <-  res[2:718]
+               rho <-  cor(res1,res2)
+               J <- 1:718
+               P <- rho^(J-1)
+               sigma <-  toeplitz(P)
+               Y <-  Y_hat
+}
+DATA_est$wfit <- Y_hat
+plot(co2~time, DATA_est)
+lines(Y_hat~time, DATA_est, type="l", lwd=1, col = "blue")
+points(fit~time, DATA_est, type="l", lwd=1, col = "red")
+legend("bottomright", legend = c("Observed","Fitted, OLS","Fitted, WLS"), col = c('black','blue','red'), pch=c(1,NA,1), lty=c(NA,1,1))
+```
+
+The difference between two plots are negligible and two methods almost rprovide identical solution.
+
+
+
+The L value of the Linear + harmonic model in the case of the problem could be written as:
+
+$$\begin{array}
+{rrrr}
+1 & 0 & 0 & 0 \\
+1 & 1 & 0 & 0 \\
+0 & 0 & cos(2\pi/p) & sin(2\pi/p) \\
+0 & 0 & -sin(2\pi/p) & cos(2\pi/p)
+\end{array}
+$$
+The f(0) as well could be written as:
+
+$$\begin{array}
+{rrrr}
+1 & \\
+0 & \\
+0 & \\
+1 & 
+\end{array}
+$$
+
