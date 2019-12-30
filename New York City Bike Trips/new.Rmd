@@ -1,0 +1,23 @@
+---
+title: "new"
+author: "Peyman Kor"
+date: "12/13/2019"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r}
+library(alluvial)
+library(tidyverse)
+NYL_trip_group_nonsim <- NYL_trip %>% 
+  filter(start_station_id != end_station_id) %>% 
+  count(start_station_id,end_station_id) %>% 
+  filter(n > 300) %>% 
+  arrange(desc(n)) 
+  
+  
+alluvial(NYL_trip_group_nonsim[,1:2], freq=NYL_trip_group_nonsim$n, xw=0.0, alpha=0.8,       
+          gap.width=0.1, col= 1:4, border="white")
+```
+
