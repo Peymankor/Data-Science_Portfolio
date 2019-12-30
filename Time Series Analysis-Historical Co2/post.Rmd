@@ -1,0 +1,164 @@
+---
+title: "post"
+author: "Peyman Kor"
+date: "12/30/2019"
+output: md_document
+---
+
+## Question 3.1 Plotting
+
+The data set is divided to two sets. From the beginning until the beginning of the 2018 is considered as the **Train** Data set and from Jan 2018 beyond is considered the **Test** data-set.
+
+
+```{r}
+library(tidyverse)
+library(forecast)
+library(lubridate)
+library(car)
+library(scales)
+#install.packages('patchwork')
+library(patchwork)
+#sppressMessages(library(tidyverse))
+#suppressMessages(library(forecast))
+#suppressMessages(library(car))
+```
+### Data Import:
+
+The data will of mounthly Co2 Concentration in (Part Per Million) over the period of the "1960/3-2019/12" measured at Mauna Loa Observatory, Hawaii. The link for the this data available at:
+
+[ftp://aftp.cmdl.noaa.gov/products/trends/co2/co2_mm_mlo.txt]
+
+Now, to read this data in the R, couples of points must be considered:
+
+- The data has the comments, which is not our interest of analysis. Therefore, in import code we show that with *comment.char = '#' *, 
+- The data has 7 columns yet some of them like the Year and Month label have not been written in the data, so while importing we assing the folloowing column names:
+- The columns wwere seperate using the white space, therfore the sep = '' will be added to the code.
+- Year,Month,Time,Co2_con,Interpolated,Trend,Days
+- Since we are including the column names, the header = F could be included.
+
+```{r}
+data <- read.delim('ftp://aftp.cmdl.noaa.gov/products/trends/co2/co2_mm_mlo.txt', comment.char = '#', header = F, sep = '', col.names = c('Year','Month','Time','Co2_Concentration','Interpolated','Trend','Days'))
+```
+
+
+#### Make Data Tidy:
+Look on any NA values:
+
+```{r}
+which(is.na(data))
+```
+
+Good, we have the complete measured data! However when read the data we see some -99.99 values! - be careful, as was mentioned in the comments these values are when the measurement were not avilable - so for these points (which are 7 out of 741 measueremnets), we use the *Interpolated* colmns:
+
+
+```{r}
+data_cc <- data %>% 
+    mutate(
+        Co2_Con = case_when(
+            Co2_Concentration == -99.99 ~ Interpolated,
+            TRUE ~ Co2_Concentration
+        )
+    )
+
+```
+
+
+Let's jhave look on column types:
+
+```{r}
+sapply(data_cc, class)
+```
+
+We can see that column types are in approriate format, yet we can add the new column named *Date* which give the date of measurement in the standard time sery format:
+
+### Data Transform
+
+Here *Lubridate* package provides a easy method to convert our *Year* and *Month* column to date:
+
+```{r}
+data_cc$Date <- ymd(paste0(data$Year, " ", data$Month, " ", "15"))
+```
+
+Also, we can see in the analysis we want to do, we do not the following columsn, so we could select the requered column needed our analys:
+
+```{r}
+data_cc_sel <- data_cc %>% 
+    select(Year, Month, Date, Co2_Con )
+```
+
+
+Also, we need to have portion of our data, to test the model we develop based on the training data- So, Here, we consider the data for *2017*, *2018* and *2019* as the test data, the rest are the training data.
+
+
+```{r}
+data_cc_sel_test <- data_cc_sel %>% 
+    filter(Year > 2016)
+data_cc_sel_train <- data_cc_sel %>% 
+    filter(Year <= 2016)
+```
+
+
+
+### Data Visulization
+
+Now, let's visulize the data first,
+
+```{r}
+ggplot(data_cc_sel,aes(Date, Co2_Con)) +
+    geom_line(color='blue') +
+    xlab("Year, Month") +
+    scale_x_date(date_labels = "%Y-%m", date_breaks = "5 year") +
+    theme(axis.text.x = element_text(face = "bold", color = "#993333", 
+                           size = 12, angle = 45, hjust = 1)) +
+    ylab("CO2 Concentration (ppm)") +
+    #scale_x_continuous(breaks = trans_breaks(identity, identity, n = 10))
+    scale_y_continuous() +
+    theme(axis.text.y = element_text(face = "bold", color = "#993333", 
+                           size = 10, hjust = 1),axis.title.y = element_text(size = 10))
+```
+
+
+```{r}
+p1 <- ggplot(data_cc_sel,aes(Date, Co2_Con)) +
+    geom_line(color='blue') +
+    xlab("Year, Month") +
+    scale_x_date(date_labels = "%Y-%m", date_breaks = "5 year") +
+    theme(axis.text.x = element_text(face = "bold", color = "#993333", 
+                           size = 12, angle = 45, hjust = 1)) +
+    ylab("CO2 Concentration (ppm)") +
+    #scale_x_continuous(breaks = trans_breaks(identity, identity, n = 10))
+    scale_y_continuous() +
+    theme(axis.text.y = element_text(face = "bold", color = "#993333", 
+                           size = 10, hjust = 1),axis.title.y = element_text(size = 8))
+
+
+p2 <- ggplot(data_cc_sel_train,aes(Date, Co2_Con)) +
+    geom_line(color='blue') +
+    xlab("Year, Month") +
+    scale_x_date(date_labels = "%Y-%m", date_breaks = "5 year") +
+    theme(axis.text.x = element_text(face = "bold", color = "#993333", 
+                           size = 12, angle = 45, hjust = 1)) +
+    ylab("CO2 Concentration (ppm)") +
+    #scale_x_continuous(breaks = trans_breaks(identity, identity, n = 10))
+    scale_y_continuous() +
+    theme(axis.text.y = element_text(face = "bold", color = "#993333", 
+                           size = 10, hjust = 1), axis.title.y = element_text(size = 8))
+
+
+p3 <- ggplot(data_cc_sel_test,aes(Date, Co2_Con)) +
+    geom_line(color='blue') +
+    xlab("Year, Month") +
+    scale_x_date(date_labels = "%Y-%m", date_breaks = "1 year") +
+    theme(axis.text.x = element_text(face = "bold", color = "#993333", 
+                           size = 12, angle = 45, hjust = 1)) +
+    ylab("CO2 Concentration (ppm)") +
+    #scale_x_continuous(breaks = trans_breaks(identity, identity, n = 10))
+    scale_y_continuous() +
+    theme(axis.text.y = element_text(face = "bold", color = "#993333", 
+                           size = 10, hjust = 1), axis.title.y = element_text(size = 8))
+
+
+(p2 | p3 ) /
+      p1
+
+```
