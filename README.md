@@ -2,10 +2,9 @@
 ## Welcome!
 
 This is the repo contains projects I am doing in the area of Data Science, Machine Learning and Petroluem Data Analytics.
-
-[//]: <> (More describtion of the projects or documents in this repo could be found in my personal website at [peymankor.github.io](https://peymankor.github.io/))
-
-
+<!---
+ore describtion of the projects or documents in this repo could be found in my personal website at [peymankor.github.io](https://peymankor.github.io/)
+-->
 
 Here, I provide the brief describtion of each project:
 - [Computational Tools for data Science](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Computational%20Tools%20for%20Data%20Analysis) is the master degree course at Technical University of Denmark. In this course 3 projects were conducted dealing with working with command line, data analysis with pandas and at the end streaming techniques and working with Pyspark.
