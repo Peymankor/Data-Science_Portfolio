@@ -1,9 +1,9 @@
 # Personal Portfolio - Data Science Projects
 
+## Welcome!
 
 ![image](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/cover.jpg)
 
-## Welcome!
 
 This is the repo contains projects I am doing in the area of Data Science, Machine Learning and Petroluem Data Analytics.
 <!---
