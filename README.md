@@ -1,4 +1,9 @@
 # Personal Portfolio - Data Science Projects
+
+<!---
+![image](https://github.com/alexhuang1117/personal_projects/blob/master/pm25_analysis/images/model_arch.jpg?raw=true)
+-->
+
 ## Welcome!
 
 This is the repo contains projects I am doing in the area of Data Science, Machine Learning and Petroluem Data Analytics.
