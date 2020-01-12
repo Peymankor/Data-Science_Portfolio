@@ -197,36 +197,39 @@ Co2_train %>% ggtsdisplay()
 Clearly the the data shows the differencing, now we make the ordinary diffrencing of the with the lag of 12:
 
 ```{r}
-Co2_train %>% diff(1,lag=12) %>% ggtsdisplay()
+#Co2_train %>% diff(1,lag=12) %>% ggtsdisplay()
+Co2_train %>% diff(lag=12) %>% diff() %>% ggtsdisplay()
 ```
 
-Now, it is better, we subtanitally removed the trend and as well the ACF is declining until the lag =12. At this stage, we can go for another diffrencing , but it is choice and there is no clear distinction. We start the model with the $D = 1$ in the $ARIMA(p,d,q)(P,D,Q)[12] using the forecast package.
+Now, it is better, we subtanitally removed the trend and as well the ACF is declining until the lag =12. At this stage, we can go for another diffrencing , but it is choice and there is no clear distinction. We start the model with the $d=D = 1$ in the $ARIMA(p,d,q)(P,D,Q)[12] using the forecast package.
 
-Now, we must have some starting parameters for p,q,D,Q . So, let's lokk on the above ACF and PACF:
-* In the non-seasonal lags, there are three significant spikes in the PACF, suggesting a possible AR(3) term. The pattern in the ACF is not indicative of any simple model. so, the starting point is $p$ = 3
+Now, we must have some starting parameters for p,q,D,Q . So, let's look on the above ACF and PACF:
+* In the seasonal lags, there is one significant spike in the ACF, suggesting a possible MA(1) term. so, the starting point is $Q$ = 1
 
-* In the plots of the seasonally differenced data, there are three spikes at PACF plot, this may be suggestive of a seasonal AR(3) term, $P=3$
+* In the plots of the non-seasonal differenced data, there are three spikes at ACF plot, this may be suggestive of a seasonal MA(3) term, $q=3$
 
-Cosequently, we start withe the $ARIMA(3,0,0)(3,1,0)[12]$ and make variations in the AR and MA terms. Here, while keeping the order constant (d,D), we use the AICs values to judge the quelity of models. (minimize the AICs)
+Cosequently, we start withe the $ARIMA(0,1,3)(3,1,1)[12]$ and make variations in the AR and MA terms. Here, while keeping the order constant (d,D), we use the AICs values to judge the quelity of models. (minimize the AICs)
 
 ```{r}
-(fitnew_1 <- Arima(Co2_train, order=c(3,0,0),seasonal=list(order=c(3,1,1),period=12),
+(fitnew_1 <- Arima(Co2_train, order=c(0,1,3),seasonal=list(order=c(3,1,1),period=12),
                  include.drift = T, lambda = "auto"
               ))
+checkresiduals(fitnew_1, lag=36)
+
 
 ```
 
 ```{r}
 aicsvalue <- function(p,q,P,Q) {
-  fit <- Arima(Co2_train, order=c(p,0,q),seasonal=list(order=c(P,1,Q),period=12),
-                  lambda = "auto", include.drift = T
+  fit <- Arima(Co2_train, order=c(p,1,q),seasonal=list(order=c(P,1,Q),period=12),
+                  lambda = "auto"
               )
   return(fit$aicc)
 }
 
-model_eva <- data.frame(Model_name=c("ARIMA(3,0,0)(3,1,0)[12]","ARIMA(2,0,0)(3,1,0)[12]","ARIMA(3,0,0)(2,1,0)[12]",
-                                     "ARIMA(2,0,0)(1,1,0)[12]","ARIMA(1,0,1)(1,1,1)[12]","ARIMA(2,0,1)(1,1,0)[12]",
-                                     "ARIMA(2,0,2)(0,1,2)[12]","ARIMA(3,0,1)(1,1,1)[12]","ARIMA(2,0,1)(1,1,1)[12]" ), AICc=c(aicsvalue(3,0,3,0),aicsvalue(2,0,3,0),aicsvalue(3,0,2,0),                                                            aicsvalue(2,0,1,0),aicsvalue(1,1,1,1),aicsvalue(2,0,1,0),                                                           aicsvalue(2,2,0,2),aicsvalue(3,1,1,1), aicsvalue(2,1,1,1)))
+model_eva <- data.frame(Model_name=c("ARIMA(0,1,3)(3,1,1)[12]","ARIMA(0,1,1)(3,1,1)[12]","ARIMA(1,1,0)(1,1,0)[12]",
+                                     "ARIMA(1,1,2)(1,1,0)[12]","ARIMA(1,1,3)(0,1,1)[12]","ARIMA(1,1,1)(1,1,0)[12]",
+                                     "ARIMA(1,1,1)(1,1,0)[12]","ARIMA(1,1,0)(1,1,1)[12]","ARIMA(1,1,1)(0,1,1)[12]" ), AICc=c(aicsvalue(0,3,3,1),aicsvalue(0,1,3,1),aicsvalue(1,0,1,0),                                                            aicsvalue(1,2,1,0),aicsvalue(1,3,0,1),aicsvalue(1,1,1,0),                                                           aicsvalue(1,1,1,0),aicsvalue(1,0,1,1), aicsvalue(1,1,0,1)))
 
 ```
 
@@ -239,13 +242,13 @@ model_eva %>%
 ```
 
 
-Based on the above abalysis, the $ARIMA(2,0,1)(1,1,1)[12]$ will be selected, but we need to check the residual to avoid any over and under fitting as well, to see the Ljung-Box test whether the the residuals resembles white noise or not. 
+Based on the above abalysis, the $ARIMA(1,1,1)(0,1,1)[12]$ will be selected, but we need to check the residual to avoid any over and under fitting as well, to see the Ljung-Box test whether the the residuals resembles white noise or not. 
 
 
 
 ```{r}
-(fit_minaicc <- Arima(Co2_train, order=c(2,0,1),seasonal=list(order=c(1,1,1),period=12),
-                 include.drift = T, lambda = "auto"
+(fit_minaicc <- Arima(Co2_train, order=c(1,1,1),seasonal=list(order=c(0,1,1),period=12),
+                  lambda = "auto"
               ))
 checkresiduals(fit_minaicc, lag=36)
 fit_minaicc$aicc
@@ -253,9 +256,9 @@ fit_minaicc$aicc
 ```
 
 
-Now, we can see the residualy sufficiently resembles the white noise also the p value high and the model pass the test for Ljong-Box test. (However it must be mentioned the some of the ACF are just reach the boundary in blue line, yet, I do not think it will affect the prediction subtantially - sometime it is difffuclt to have model pass al test.)
+Now, we can see the residualy sufficiently resembles the white noise also the p value high and the model pass the test for Ljong-Box test. (However it must be mentioned the one of the ACF are just reach the boundary in blue line, yet, I do not think it will affect the prediction subtantially - sometime it is difffuclt to have model pass al test.)
 
-However, still this is not the end of model selection. Here, compare the perfomance of the model on the *Test* data. We ssek to find the model which minime the RMSE. 
+However, still this is not the end of model selection. Here, we check the perfomance of the model on the *Test* data. We ssek to find the model which minime the RMSE. 
 
 
 ```{r}
@@ -268,7 +271,7 @@ This section compares the *RMSE* values for the 9 models provided in the previou
 ```{r}
 rmse_eva <- function(p,d,q,P,D,Q) {
   fit <- Arima(Co2_train, order=c(p,d,q),seasonal=list(order=c(P,D,Q),period=12),
-                  lambda = "auto", include.drift = T
+                  lambda = "auto"
               )
   mm <- accuracy(forecast(fit,h=35)$mean, Co2_test)
   return(mm[2])
@@ -276,11 +279,11 @@ rmse_eva <- function(p,d,q,P,D,Q) {
 }
 
 rmse_eva <- data.frame(Model_name=c(
-"ARIMA(3,0,0)(3,1,0)[12]","ARIMA(2,0,0)(3,1,0)[12]","ARIMA(3,0,0)(2,1,0)[12]",
-"ARIMA(2,0,0)(1,1,0)[12]","ARIMA(1,0,1)(1,1,1)[12]","ARIMA(2,0,1)(1,1,0)[12]",
-"ARIMA(2,0,2)(0,1,2)[12]","ARIMA(3,0,1)(1,1,1)[12]","ARIMA(2,0,1)(1,1,1)[12]"
+"ARIMA(0,1,3)(3,1,1)[12]","ARIMA(0,1,1)(3,1,1)[12]","ARIMA(1,1,0)(1,1,0)[12]",
+"ARIMA(1,1,2)(1,1,0)[12]","ARIMA(1,1,3)(0,1,1)[12]","ARIMA(1,1,1)(1,1,0)[12]",
+"ARIMA(1,1,1)(1,1,0)[12]","ARIMA(1,1,0)(1,1,1)[12]","ARIMA(1,1,1)(0,1,1)[12]"
  ), RMSE=c(                        
-rmse_eva(3,0,0,3,1,0),rmse_eva(2,0,0,3,1,0),rmse_eva(3,0,0,2,1,0),                                                  rmse_eva(2,0,0,1,1,0),rmse_eva(1,0,1,1,1,1),rmse_eva(2,0,1,1,1,0),                                                  rmse_eva(2,0,2,0,1,2),rmse_eva(3,0,1,1,1,1),rmse_eva(2,0,1,1,1,1)))                                                  
+rmse_eva(0,1,3,3,1,1),rmse_eva(0,1,1,3,1,1),rmse_eva(1,1,0,1,1,0),                                                  rmse_eva(1,1,2,1,1,0),rmse_eva(1,1,3,0,1,1),rmse_eva(1,1,1,1,1,0),                                                  rmse_eva(1,1,1,1,1,0),rmse_eva(1,1,0,1,1,1),rmse_eva(1,1,1,0,1,1)))                                                  
 ```
 
 
@@ -290,13 +293,13 @@ rmse_eva %>%
   kable_styling()
 ```
 
-The results show that the the model $ARIMA(2,0,2)(0,1,2)[12]$ has the minimum $RMSE$ values, however it was not the minimum in the $AICc$ values, yet it was very close to the minimum. Atbthe end, knowing that the model residuals foloow the white noise, the $RMSE$ is the final criteria to the selection since it performs on the data the model has not seen in the training process.
+The results show that the the model $ARIMA(1,1,1)(0,1,1)[12]$ has not the minimum $RMSE$ values, yet it was very close to the minimum, however it was minimum in the $AICc$ values. Atbthe end, knowing that the model residuals foloow the white noise, the $RMSE$ is the final criteria to the selection since it performs on the data the model has not seen in the training process.
 Using the forecast package, the figures shows the model prediction until the 2050, given the confidence intervals.
 
 ```{r}
 Co2_train %>%
-  Arima(order=c(2,0,2),seasonal=list(order=c(0,1,2),period=12),
-                 include.drift = T, lambda = "auto"
+  Arima(order=c(1,1,1),seasonal=list(order=c(0,1,1),period=12),
+                lambda = "auto"
               ) %>%
   forecast(h=400) %>%
   autoplot() +
@@ -310,7 +313,7 @@ Co2_train %>%
 Let's zoom in the model prediction and the test data to see the model perfomance visually:
 
 ```{r}
-prediction <- forecast(fit_minaicc,h=35) 
+prediction <- forecast(fit_minaicc,h=36) 
 data_cc_sel_test$prediction <- prediction$mean
 data_test_pre_tidy <- gather(data_cc_sel_test, "type", "Co2", -Year,-Month,-Date)
 ggplot(data_test_pre_tidy,aes(Date, Co2,color=type)) +
@@ -359,4 +362,4 @@ Now, having the cumulative distribution, we could ask this question:
 ```{r}
 cdf_co2_con_2050(460)
 ```
-As you can see, the answer is 11.6%.
+As you can see, the answer is around 9%.
