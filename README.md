@@ -1,3 +1,5 @@
+<h1 align="center"> My Data Science Portfolio </h1> <br>
+
 # Personal Portfolio - Data Science Projects
 
 ## Welcome!
