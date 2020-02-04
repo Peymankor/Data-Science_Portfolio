@@ -14,6 +14,11 @@
 - [Introduction](#introduction)
 
 - [Custumer Database](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Computational%20Tools%20for%20Data%20Analysis/Project%20%23%201/Project%201%20-%20Customer%20Database.ipynb)
+- [Custumer Sampling](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Computational%20Tools%20for%20Data%20Analysis/Project%20%23%202/Mandatory%20Assignment%202%20-%20Sampling%20Customers%20(2).ipynb)
+- [General Linear Model (GLM) for Atmospheric CO2](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Time%20Series%20Analysis/Project%20%23%201)
+- [ARMA Processes and Seasonal Processe](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Time%20Series%20Analysis/Project%20%23%202)
+- [ARIMA model atmospheric CO2](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Time%20Series%20Analysis/Project%20%23%203)
+- [Kalman Filter](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Time%20Series%20Analysis/Project%20%23%204)
 
 
 This is the repo contains projects I am doing in the area of Data Science, Machine Learning and Petroluem Data Analytics.
