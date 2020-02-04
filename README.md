@@ -41,13 +41,13 @@ My project collection covers various Data Science and Machine Learning applicati
 
 <p align="center">
   <a href="https://github.com/Peymankor/Data-Science_Portfolio/tree/master/costumer%20database">
-    <img alt="Customer Churn Study" title="Customer Churn Study" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/costumer%20database/project1_2.png?raw=true">
+    <img alt="Customer Database Analysis" title="Customer Database Analysis" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/costumer%20database/project1_2.png?raw=true">
   </a>
 </p>
 
 <p align="center">
   <a href="https://github.com/Peymankor/Data-Science_Portfolio/tree/master/costumer%20database">
-    <img alt="Customer Churn Study" title="Customer Churn Study" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/costumer%20database/project1_1.png">
+    <img alt="Customer Database Analysis" title="Customer Database Analysis" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/costumer%20database/project1_1.png">
   </a>
 </p>
 Churn rate is one of the important business metrics. A company can compare its churn and growth rates to determine if there was overall growth or loss. When the churn rate is higher than the growth rate, the company has experienced a loss in its customer base.
