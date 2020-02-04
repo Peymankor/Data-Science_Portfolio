@@ -21,6 +21,11 @@
 - [Kalman Filter](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Time%20Series%20Analysis/Project%20%23%204)
 - [The UN Refugee Council Project](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/UNHCR%20Report)
 - [New York City Bike Trips](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/New%20York%20City%20Bike%20Trips)
+- [Bayesian Neural Network](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/New%20York%20City%20Bike%20Trips)
+- [Coronavirus Analysis](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/New%20York%20City%20Bike%20Trips)
+- [Value of Information Analysis Dashboard](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/New%20York%20City%20Bike%20Trips)
+- [Probabilistic Reserve Evaluation Dashboard](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/New%20York%20City%20Bike%20Trips)
+- [State Space Model](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/New%20York%20City%20Bike%20Trips)
 
 ## Introduction
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/KevinLiao159/MyDataSciencePortfolio)
