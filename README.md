@@ -1,4 +1,9 @@
 <h1 align="center"> My Data Science Portfolio </h1> <br>
+<p align="center">
+  <a href="https://github.com/Peymankor/Data-Science_Portfolio">
+    <img alt="DataScience" title="DataScience" src="https://cdn-images-1.medium.com/max/1600/1*u16a0WbJeckSdi6kGD3gVA.jpeg" width="600" height="300">
+  </a>
+</p>
 
 # Personal Portfolio - Data Science Projects
 
