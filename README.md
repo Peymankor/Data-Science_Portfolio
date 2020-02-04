@@ -53,3 +53,18 @@ My project collection covers various Data Science and Machine Learning applicati
 Churn rate is one of the important business metrics. A company can compare its churn and growth rates to determine if there was overall growth or loss. When the churn rate is higher than the growth rate, the company has experienced a loss in its customer base.
 
 Why customers churn and stop using a company's services? What is the estimate amount of churn for next quarter? Being able to answer above two questions can provide meaningful insights about what direction the company is currently heading towards and how the company can improve its products and services so that constomers would stay. 
+
+## Custumer Sampling
+<p align="center">
+  <a href="https://github.com/KevinLiao159/MyDataSciencePortfolio/tree/master/medium_blogpost">
+    <img alt="Medium Blogpost" title="Medium Blogpost" src="http://yosinski.com/mlss12/media/slides/MLSS-2012-Blei-Probabilistic-Topic-Models_020.png">
+  </a>
+</p>
+
+Medium is a popular blogpost publishing platform with enormous amount of contents and text data. What are people publishing? What are the latent topics in those blogposts? What makes a blogpost popular? And what is the trend in today's Technology? This project aims to answer the questions through visualization, analysis, natural language process, and machine learning techniques.
+
+Specifically, I will use **Seaborn** and **Pandas** for exploratory analysis. For machine learning modeling, I choose **K-means**, **tSVD**, and **LatentDirichletAllocation** for topic modeling. I will perform this study with two different ML frameworks: **Sklearn** and **Spark**.
+
+**Sklearn** is a great python machine learning library for data scientist.
+
+However, in the age of Big Data, most data analysis are predicated on distributed computing. **Spark** is distributed cluster-computing framework and provides an interface for programming entire clusters with implicit data parallelism and fault tolerance.
