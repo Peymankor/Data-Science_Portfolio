@@ -1,7 +1,7 @@
 <h1 align="center"> My Data Science Portfolio </h1> <br>
 <p align="center">
   <a href="https://github.com/Peymankor/Data-Science_Portfolio">
-    <img alt="DataScience" title="DataScience" src="https://images.squarespace-cdn.com/content/v1/54ad9bf4e4b0618d6af9be81/1480280105298-I38TK9AYARZ4I2APOH49/ke17ZwdGBToddI8pDm48kNij0lEt8mkm0VuEfDKf7TNZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAgTJucoTqqXjS3CfNDSuuf31e0tVEK6nv0N7bd92DrnsqQifa7MgxkYh9Pu-eQN_dRuLo0shur-lC0WofN0YB1wFg-ZW0/word+cloud.png?format=500w" width="800" height="300">
+    <img alt="DataScience" title="DataScience" src="https://images.squarespace-cdn.com/content/v1/54ad9bf4e4b0618d6af9be81/1480280105298-I38TK9AYARZ4I2APOH49/ke17ZwdGBToddI8pDm48kNij0lEt8mkm0VuEfDKf7TNZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAgTJucoTqqXjS3CfNDSuuf31e0tVEK6nv0N7bd92DrnsqQifa7MgxkYh9Pu-eQN_dRuLo0shur-lC0WofN0YB1wFg-ZW0/word+cloud.png?format=500w" width="800" height="400">
   </a>
 </p>
 
