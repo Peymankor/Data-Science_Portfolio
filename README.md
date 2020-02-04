@@ -19,7 +19,8 @@
 - [ARMA Processes and Seasonal Processe](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Time%20Series%20Analysis/Project%20%23%202)
 - [ARIMA model atmospheric CO2](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Time%20Series%20Analysis/Project%20%23%203)
 - [Kalman Filter](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Time%20Series%20Analysis/Project%20%23%204)
-
+- [The UN Refugee Council Project](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/UNHCR%20Report)
+- [New York City Bike Trips](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/New%20York%20City%20Bike%20Trips)
 
 This is the repo contains projects I am doing in the area of Data Science, Machine Learning and Petroluem Data Analytics.
 <!---
