@@ -22,6 +22,14 @@
 - [The UN Refugee Council Project](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/UNHCR%20Report)
 - [New York City Bike Trips](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/New%20York%20City%20Bike%20Trips)
 
+## Introduction
+[![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/KevinLiao159/MyDataSciencePortfolio)
+![Python](https://img.shields.io/badge/python-v3.6+-blue.svg)
+![Dependencies](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+
+
 This is the repo contains projects I am doing in the area of Data Science, Machine Learning and Petroluem Data Analytics.
 <!---
 ore describtion of the projects or documents in this repo could be found in my personal website at [peymankor.github.io](https://peymankor.github.io/)
