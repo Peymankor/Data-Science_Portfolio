@@ -54,6 +54,14 @@ Churn rate is one of the important business metrics. A company can compare its c
 
 Why customers churn and stop using a company's services? What is the estimate amount of churn for next quarter? Being able to answer above two questions can provide meaningful insights about what direction the company is currently heading towards and how the company can improve its products and services so that constomers would stay. 
 
+## General Linear Model (GLM) for Atmospheric CO2
+<p align="center">
+  <a href="https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Least%20Square%20Trend%20Modeling">
+    <img alt="Medium Blogpost" title="Medium Blogpost" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Least%20Square%20Trend%20Modeling/plot.png">
+  </a>
+</p>
+
+
 ## Custumer Sampling
 <p align="center">
   <a href="https://github.com/KevinLiao159/MyDataSciencePortfolio/tree/master/medium_blogpost">
