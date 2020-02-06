@@ -162,7 +162,6 @@ test %>%
 Here, the goal is to plot the China map and have the number of confirmed people as the points related to the state spatial location: Note: you need to register your google platform code using the register_google()
 
 ```{r}
-register_google(key = "AIzaSyATZfUpRb4dxdQAMkBTEDSBjwOAybvkU50")
 map_china=get_map("China", zoom = 4,  maptype = "hybrid")
 options(repr.plot.width = 30, repr.plot.height = 14)
 ggmap(map_china, extent = "device")
