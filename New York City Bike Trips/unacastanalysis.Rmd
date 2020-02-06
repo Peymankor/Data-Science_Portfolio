@@ -2,9 +2,7 @@
 title: "New York City Bike Trip Analysis"
 author: "Peyman Kor"
 date: "12/12/2019"
-output: 
-  pdf_document:
-    toc: true
+output: md_document
 ---
 
 \newpage
@@ -24,7 +22,7 @@ Now, the next step of the analysis would be the writing the SQL query to retriev
 Firs, in order to have the overview on the data-set, we import all the columns and but in order to avoid the massive data-set, we limit the rows to 1000.
 
 ```{r}
-# Project ID
+# Project IDå
 project_id <- "xenon-muse-261616" # put your project ID here
 
 # query
@@ -154,7 +152,7 @@ sql_string_tot <- "SELECT
 FROM
   [bigquery-public-data.new_york.citibike_trips]
 LIMIT
-1000000"
+100000"
 # Execute the query and store the result
 NY_Lsample <- query_exec(sql_string_tot, project = project_id, 
                          useLegacySql = FALSE, max_pages = 100)
@@ -192,7 +190,7 @@ sql_string_tot_trip <- "SELECT
 FROM
   [bigquery-public-data.new_york.citibike_trips]
 LIMIT
-1000000"
+100000"
 # Execute the query and store the result
 NYL_trip <- query_exec(sql_string_tot_trip, project = project_id, useLegacySql = FALSE, max_pages = 100)
 ```
@@ -206,7 +204,7 @@ Here, we group the data based on the *start_station_id* and as well *end_station
 ```{r}
 NYL_trip_group <- NYL_trip %>% 
   count(start_station_id,end_station_id) %>% 
-  filter(n > 300) %>% 
+  filter(n > 100) %>% 
   arrange(desc(n))
 NYL_trip_group
 ```
@@ -217,7 +215,7 @@ NYL_trip_group
 ```{r}
 library(alluvial)
 alluvial(NYL_trip_group[,1:2], freq=NYL_trip_group$n, xw=0.0, alpha=0.8,       
-          gap.width=0.1, col= 1:10, border="white")
+          gap.width=0.1, col= 1:9, border="white")
 ```
 
 However, maybe the the trip between the same *station_id* may not be informative, therefore in the new plot we removed the same start and end stations and includes the only trips where have different start and end point:
@@ -228,12 +226,12 @@ library(alluvial)
 NYL_trip_group_nonsim <- NYL_trip %>% 
   filter(start_station_id != end_station_id) %>% 
   count(start_station_id,end_station_id) %>% 
-  filter(n > 300) %>% 
+  filter(n > 100) %>% 
   arrange(desc(n)) 
   
   
 alluvial(NYL_trip_group_nonsim[,1:2], freq=NYL_trip_group_nonsim$n, xw=0.0, alpha=0.8,       
-          gap.width=0.1, col= 1:4, border="white")
+          gap.width=0.1, col= 1:9, border="white")
 ```
 
 # Question: Were there new bike stations introduced or removed at any point in time? What makes you think it were or weren't?
@@ -253,7 +251,7 @@ sql_string_newsta <- "SELECT
 FROM
   [bigquery-public-data.new_york.citibike_trips]
 LIMIT
-1000000"
+100000"
 # Execute the query and store the result
 NYL_newsta <- query_exec(sql_string_newsta, project = project_id, 
                          useLegacySql = FALSE, max_pages = 100)
