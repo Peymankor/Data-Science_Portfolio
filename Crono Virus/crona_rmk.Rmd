@@ -1,0 +1,316 @@
+---
+title: "CORONA VIRUS"
+author: "Peyman Kor"
+date: "2/6/2020"
+output: md_document
+---
+
+```{r include=FALSE}
+library(tidyverse)  # Useful package for data manuplation and analysis
+library(ggmap)      # libbrary for map
+library(lubridate)  # useful for working with date data
+library(ggthemes)   # Some pre_designed ggplot themes are available in this package
+library(maps)       # Maps of the countris like China is available in this package
+library(patchwork)  # Easy tool to combine two plots
+
+# The below is the setting for adjusting the width and length of ggplots in the notebook
+#options(repr.plot.width = 24, repr.plot.height = 16)
+```
+
+gglot theme - Design
+Here, I design my style for ggplots and and could use this one for stylying the plots in the rest.
+
+```{r}
+mytheme <- theme_dark() +
+    theme(plot.title = element_text(color="black", size=14, face="bold.italic")) +
+    theme(
+      strip.text.x = element_text(
+        size = 14, color = "orange", face = "bold.italic"
+        ),
+      strip.text.y = element_text(
+        size = 14, color = "orange", face = "bold.italic"
+        )
+      ) +
+    theme(panel.grid.major = element_line(colour = "black")) +                   
+    theme(axis.text.x = element_text(face = "bold", color = "#993333",            
+                                     size = 14, angle = 45, hjust = 1)) + 
+    theme(axis.text.y = element_text(face = "bold", color = "#993333",            
+                                     size = 14, hjust = 1)) +
+    theme(legend.title=element_text(size=14)) +                                   
+    theme(legend.text=element_text(size=14)) +                                       
+    theme(axis.title.y.left = element_text(size=14)) +                            
+    theme(axis.title.x.bottom = element_text(size=14))
+```
+
+
+## Import Data
+
+```{r}
+data <- read.csv("2019_nCoV_20200121_20200131.csv")
+head(data)
+```
+
+
+Looking on the data, two immdeiate poinst are:
+
++ The date column must be converted to the appropriate date type
++ NA values must be converted to zero, since we will make operations on the columns... (subject to arguement!)
++ Now, knowing the time scale, we use the myd_hm from lubridate to convert the date column
+
+```{r}
+data$time <-  mdy_hm(as.character(data$Last.Update))
+tail(data)
+```
+
+
+As we can see the 27 rows can failed in the parsing, the reason is the type of the date column in the last 27 rows. We do the change and use the mdy() for the last 27 rows.
+```{r}
+data$time[1099:1125] <- mdy(as.character(data$Last.Update[1099:1125]))
+tail(data)
+```
+
+
+```{r}
+data_nao <- data %>% 
+    replace_na(list(Confirmed = 0, Recovered = 0, Death=0))
+head(data_nao)
+```
+
+
+## Analysis the Data in Mainland of China:
+Here, the goal is to find the what are the Death Rate and Recovery Rate grouped by the Province in the Mainland of China. I used the pipeline with the dplyr package, yet i provided the comment for explaining each pipe:
+
+```{r}
+pd <- data_nao %>%
+    filter(Country.Region == "Mainland China" | Country.Region == "China") %>%                        
+    group_by(Province.State) %>%                                                                      
+    filter(day(time) == 31 & hour(time) == 19) %>% 
+    mutate(Recovery_Rate = Recovered*100/Confirmed, Death_Rate= Death*100/Confirmed ) %>% 
+    filter(Recovery_Rate>0 & Death_Rate>0) %>% 
+    select(Province.State,Recovery_Rate,Death_Rate) %>% 
+    pivot_longer(.,-Province.State,                                      
+                 names_to = "Situation", values_to = "Number") %>%        
+    group_by(Situation) %>%                                                                           
+    top_n(10, abs(Number)) %>%                                                                        
+    ungroup() %>%                                                                                                                                                    
+    arrange(Situation, Number) %>%                                                                 
+    mutate(order = row_number())   
+
+ggplot(pd,aes(order, Number,fill = Situation)) +                                                        
+    geom_bar(stat = "identity", show.legend = FALSE) +                                             
+    facet_wrap(~ Situation, scales = "free") +                                                     
+    xlab("China Province(State)") +
+    ylab("Percentage (%)") + 
+    ggtitle("Death Rate, Recovery Rate Mainland of ChinaData from 22 Jan til 31 Jan\nLeft: Death Rate 
+Right: Recovery Rate both in Percentage") +
+    theme_bw() +
+    scale_x_continuous(
+        breaks = pd$order,
+        labels = pd$Province.State,
+        expand = c(0,0)
+    ) +
+    coord_flip() + mytheme +                                                                       
+    scale_y_continuous(breaks = seq(from = 0, to = 5, by = 1))
+```
+
+
+Now, in this part the goal is to see in which state, the number of confirmed people are fastest growing:
+
+```{r}
+data_nao %>% 
+    filter(Country.Region == "Mainland China" | Country.Region == "China") %>% 
+    filter(Province.State != "Hubei") %>% 
+    group_by(time,Province.State)  %>% 
+    arrange(desc(Confirmed)) %>%
+    filter(Confirmed>150) %>% 
+    #head(100) %>%  
+    ggplot(aes(x=as.POSIXct(time), y=Confirmed, color=Province.State)) +
+    geom_line(size=3) +
+    ggtitle("Growth in the Number of People Confirmed to CronaVirus") +
+    mytheme + 
+    scale_x_datetime('Date',
+                     date_breaks = '8 hours',
+                     date_labels = '%B:%d h:%H')
+```
+
+## Plot the Growth Rate Versus Days:¶
+
+```{r}
+test <- data_nao %>% 
+    filter(Country.Region == "Mainland China" | Country.Region == "China") %>% 
+    filter(Province.State != "Hubei") %>%
+    mutate(day= day(as.Date(time)), hr= hour(as.Date(time))) %>% 
+    group_by(Province.State, day) %>%
+    filter(Confirmed == max(Confirmed)) %>% 
+    distinct(Confirmed) %>% 
+    #group_by(day,Province.State)  %>% 
+    arrange(desc(Confirmed)) %>%
+    filter(Confirmed>100) 
+
+
+test %>%  
+    ggplot(aes(x=day, y=Confirmed, color=Province.State)) +
+    geom_line(size=2) +
+    ggtitle("Growth in the Number of People Confirmed to CronaVirus") +
+    mytheme  +
+    scale_x_continuous(breaks = 21:31) +
+    xlab("Days at January")
+```
+
+## Spatial Visualization
+
+Here, the goal is to plot the China map and have the number of confirmed people as the points related to the state spatial location: Note: you need to register your google platform code using the register_google()
+
+```{r}
+register_google(key = "AIzaSyATZfUpRb4dxdQAMkBTEDSBjwOAybvkU50")
+map_china=get_map("China", zoom = 4,  maptype = "hybrid")
+options(repr.plot.width = 30, repr.plot.height = 14)
+ggmap(map_china, extent = "device")
+```
+
+Here, number of the confirmed patients at the first day, 21 are reported per state:
+
+```{r include=FALSE}
+data_nao_first <-  data_nao %>% 
+    filter(Country.Region=="Mainland China" | Country.Region=="China" | Country.Region=="Taiwan") %>% 
+     filter(time == as.Date("2020-01-21"))
+cities_lan_lag <- geocode(as.character(data_nao_first$Province.State))
+```
+
+```{r}
+head(cities_lan_lag)
+
+```
+
+```{r}
+data_nao_first_loc <- cbind(data_nao_first,cities_lan_lag)
+head(data_nao_first_loc)
+```
+
+```{r}
+p1 <- ggmap(map_china, extent = "device") +
+    geom_point(data = data_nao_first_loc, aes(x =lon, y= lat,size = Confirmed), alpha=1, color='red') +
+ggtitle("Number of patients Confirmed as having the Diseas on 21 January")
+p1
+```
+
+```{r}
+data_nao_last <-  data_nao %>% 
+    filter(Country.Region=="Mainland China" | Country.Region=="China" | Country.Region=="Taiwan")  %>% 
+    filter(day(time) == 31 & hour(time) == 19) %>% 
+    group_by(Province.State) 
+#cities_lan_lag_last <- geocode(as.character(data_nao_last$Province.State))
+head(data_nao_last)
+```
+
+
+```{r include=FALSE}
+cities_lan_lag_l <- geocode(as.character(data_nao_last$Province.State))
+
+data_nao_last$lon <- cities_lan_lag_l$lon
+data_nao_last$lat <- cities_lan_lag_l$lat
+
+
+
+#data_nao_last_loc <- cbind(data_nao_last,cities_lan_lag_l)
+```
+
+
+```{r}
+head(data_nao_last)
+
+```
+
+
+
+```{r}
+p2 <- ggmap(map_china, extent = "device") +
+    geom_point(data = data_nao_last, aes(x =lon, y= lat,size = Confirmed), alpha=2, color='blue') +
+    ggtitle("Number of patients Confirmed as having the Diseas on 31 January")
+
+p2
+```
+
+```{r}
+p1 | p2
+
+```
+
+# Numbers of New Countries Receiving the Virus over the Days:
+
+```{r}
+uniqu_con <- data_nao %>% 
+    mutate(day = format(time, "%d")) %>% 
+    group_by(day) %>% 
+    distinct(Country.Region) %>% 
+    group_by(day,Country.Region) %>% 
+    tally
+```
+
+```{r}
+dim(uniqu_con)
+head(uniqu_con)
+```
+
+
+```{r}
+countries <- c("")
+unique_con_df <- as.data.frame(uniqu_con)
+non_uniqu_con <- rep(0, 178)
+for (i in 1:178) {
+    if (!(unique_con_df[i,2] %in% countries)) {
+        non_uniqu_con[i] <- 1
+        countries <- c(countries,as.character(unique_con_df[i,2]))
+    } 
+    
+}
+uniqu_con$new <- non_uniqu_con
+head(uniqu_con)
+```
+
+```{r}
+uniqu_con %>% 
+    group_by(day) %>% 
+    summarize(total=sum(new))  %>% 
+    ggplot(aes(day,total)) +
+    geom_bar(stat = "identity", fill='blue') +
+    ylab("New Countries having Confirmed the Crona") +
+    xlab("Days of January") +
+    ggtitle("Number of New Countries added to having the Crona Virus") +
+    mytheme
+```
+
+```{r}
+map_world=get_map("World", zoom = 1)
+ggmap(map_world, extent = "device")
+```
+
+```{r include=FALSE}
+data_nao_total_world <-  data_nao %>% 
+    group_by(Country.Region) %>%
+    summarise(Confirmed=sum(Confirmed))
+
+data_nao_total_world <- mutate_if(data_nao_total_world, 
+                is.factor, 
+                str_replace_all, pattern = "Mainland China", replacement = "China")
+
+countries_lan_lag <- geocode(as.character(data_nao_total_world$Country.Region))
+countries_world_loc <- cbind(data_nao_total_world,countries_lan_lag)
+head(countries_world_loc)
+```
+
+
+
+```{r}
+ggmap(map_world, extent = "device") +
+    geom_point(data = countries_world_loc, aes(x =lon, y= lat,size = Confirmed), alpha=2, color='red')
+```
+
+
+
+
+
+
+
+
+
