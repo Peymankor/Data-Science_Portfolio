@@ -116,6 +116,18 @@ Churn rate is one of the important business metrics. A company can compare its c
 
 Why customers churn and stop using a company's services? What is the estimate amount of churn for next quarter? Being able to answer above two questions can provide meaningful insights about what direction the company is currently heading towards and how the company can improve its products and services so that constomers would stay. 
 
+## Bayesian Neural Network
+
+<p align="center">
+  <a href="https://github.com/Peymankor/Data-Science_Portfolio/tree/master/BNN-Project">
+    <img alt="Customer Database Analysis" title="Customer Database Analysis" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/BNN-Project/bayesianup.png">
+  </a>
+</p>
+
+Churn rate is one of the important business metrics. A company can compare its churn and growth rates to determine if there was overall growth or loss. When the churn rate is higher than the growth rate, the company has experienced a loss in its customer base.
+
+Why customers churn and stop using a company's services? What is the estimate amount of churn for next quarter? Being able to answer above two questions can provide meaningful insights about what direction the company is currently heading towards and how the company can improve its products and services so that constomers would stay. 
+
 
 ## Custumer Sampling
 <p align="center">
