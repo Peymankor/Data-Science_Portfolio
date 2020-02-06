@@ -313,7 +313,7 @@ Co2_train %>%
 Let's zoom in the model prediction and the test data to see the model perfomance visually:
 
 ```{r}
-prediction <- forecast(fit_minaicc,h=36) 
+prediction <- forecast(fit_minaicc,h=37) 
 data_cc_sel_test$prediction <- prediction$mean
 data_test_pre_tidy <- gather(data_cc_sel_test, "type", "Co2", -Year,-Month,-Date)
 ggplot(data_test_pre_tidy,aes(Date, Co2,color=type)) +
