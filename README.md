@@ -96,7 +96,7 @@ Why customers churn and stop using a company's services? What is the estimate am
 
 <p align="center">
   <a href="https://github.com/Peymankor/Data-Science_Portfolio/tree/master/costumer%20database">
-    <img alt="Customer Database Analysis" title="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/New%20York%20City%20Bike%20Trips/unacastanalysis_files/figure-markdown_strict/unnamed-chunk-19-1.png">
+    <img alt="Customer Database Analysis" title="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/New%20York%20City%20Bike%20Trips/unacastanalysis_files/figure-markdown_strict/unnamed-chunk-11-1.png">
   </a>
 </p>
 
