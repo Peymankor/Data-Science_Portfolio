@@ -61,6 +61,12 @@ Why customers churn and stop using a company's services? What is the estimate am
   </a>
 </p>
 
+## ARIMA modeling for Atmospheric CO2
+<p align="center">
+  <a href="https://github.com/KevinLiao159/MyDataSciencePortfolio/tree/master/medium_blogpost">
+    <img alt="Medium Blogpost" title="Medium Blogpost" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Seasonal%20ARIMA%20Modeling/medium_post_files/figure-markdown_strict/unnamed-chunk-10-1.png">
+  </a>
+</p>
 
 ## Custumer Sampling
 <p align="center">
