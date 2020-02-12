@@ -80,7 +80,7 @@ head(data_nao)
 ## Analysis the Data in Mainland of China:
 Here, the goal is to find the what are the Death Rate and Recovery Rate grouped by the Province in the Mainland of China. I used the pipeline with the dplyr package, yet i provided the comment for explaining each pipe:
 
-```{r}
+```{r fig.width=12, fig.height=10}
 pd <- data_nao %>%
     filter(Country.Region == "Mainland China" | Country.Region == "China") %>%                        
     group_by(Province.State) %>%                                                                      
@@ -116,7 +116,7 @@ Right: Recovery Rate both in Percentage") +
 
 Now, in this part the goal is to see in which state, the number of confirmed people are fastest growing:
 
-```{r}
+```{r fig.width=10, fig.height=10}
 data_nao %>% 
     filter(Country.Region == "Mainland China" | Country.Region == "China") %>% 
     filter(Province.State != "Hubei") %>% 
@@ -135,7 +135,7 @@ data_nao %>%
 
 ## Plot the Growth Rate Versus Days:¶
 
-```{r}
+```{r fig.width=10, fig.height=10}
 test <- data_nao %>% 
     filter(Country.Region == "Mainland China" | Country.Region == "China") %>% 
     filter(Province.State != "Hubei") %>%
