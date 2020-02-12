@@ -1,0 +1,147 @@
+---
+title: "Xgboost"
+author: "Peyman Kor"
+date: "2/11/2020"
+output: md_document
+---
+```{r warning=FALSE, error=FALSE, message=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(ggcorrplot)
+library("GGally")
+library(caret)
+library(doSNOW)
+
+```
+
+
+# Import the Data
+
+
+```{r}
+data <- read.csv('train_allreal_names.csv')
+head(data)
+data <- data[,-c(1)]
+head(data)
+```
+
+
+
+```{r fig.height=10, fig.width=10}
+corr <- round(cor(data), 1)
+ggcorrplot(corr)
+
+```
+
+```{r}
+cor_col <- cor(data)
+hc <- findCorrelation(cor_col,cutoff = 0.85)
+hc_sort <- sort(hc)
+data_reduced <- data[,-c(hc_sort)]
+```
+
+```{r fig.height=10, fig.width=10}
+corr_reduced <- round(cor(data_reduced), 1)
+ggcorrplot(corr_reduced)
+```
+
+
+```{r}
+set.seed(54321)
+
+indexes <- createDataPartition(data_reduced$NPV,
+                               times = 1,
+                               p = 0.7,
+                               list = FALSE)
+data_train <- data_reduced[indexes,]
+data_test <- data_reduced[-indexes,]
+
+head(data_train)
+
+```
+
+```{r}
+#=================================================================
+# Train Model
+#=================================================================
+# nrounds max_depth  eta gamma colsample_bytree min_child_weight subsample
+#4    4000         6 0.01     0              0.4                2         1
+#   nrounds max_depth   eta gamma colsample_bytree min_child_weight subsample
+#10    4000         6 0.025     0              0.4             2.25         1
+# Set up caret to perform 10-fold cross validation repeated 3 
+# times and to use a grid search for optimal model hyperparamter
+# values.
+train.control <- trainControl(method = "repeatedcv",
+                              number = 5,
+                              repeats = 3,
+                              search = "grid")
+
+
+# Leverage a grid search of hyperparameters for xgboost. See 
+# the following presentation for more information:
+# https://www.slideshare.net/odsc/owen-zhangopen-sourcetoolsanddscompetitions1
+tune.grid <- expand.grid(eta = c(0.05,0.1),
+                         nrounds = c(1000,4000),
+                         max_depth = c(6,8),
+                         min_child_weight = c(1.5,2.25,3),
+                         colsample_bytree = c(0.4),
+                         gamma = 0,
+                         subsample = 1)
+
+
+```
+
+
+```{r}
+# Use the doSNOW package to enable caret to train in parallel.
+# While there are many package options in this space, doSNOW
+# has the advantage of working on both Windows and Mac OS X.
+#
+# Create a socket cluster using 10 processes. 
+#
+# NOTE - Tune this number based on the number of cores/threads 
+# available on your machine!!!
+#
+cl <- makeCluster(8, type = "SOCK")
+
+# Register cluster so that caret will know to train in parallel.
+registerDoSNOW(cl)
+
+```
+
+
+
+
+```{r eval=FALSE}
+caret.cv <- train(NPV ~ ., 
+                  data = data_train,
+                  method = "xgbTree",
+                  tuneGrid = tune.grid,
+                  trControl = train.control)
+```
+
+
+```{r}
+stopCluster(cl)
+```
+
+
+```{r}
+xgboost_model <- readRDS("modelxgboost.rds")
+```
+
+```{r}
+pred1s <- predict(xgboost_model, data_test)
+
+```
+
+
+```{r}
+plot(pred1s,data_test$NPV,col='red',type = 'p',pch=1 ,xlab = 'NPV predicted by ML ($MM)',ylab = 'NPV of the real Test Data ($MM)',main = 'Test Data vs. ML Prediction')
+abline(a=0,b=1,col=4,lwd=3)  
+r2 <- caret::R2(pred1s,data_test$NPV)
+mylabel = bquote(italic(R)^2 == .(format(r2, digits = 2)))
+text(1,1, labels = mylabel, pos = 1)
+
+```
+
