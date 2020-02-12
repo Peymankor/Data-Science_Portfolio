@@ -422,7 +422,7 @@ distribution of the Co2 Concentration at the 2050:
       ylab('Cumulative Distribution') +
       xlab("Co2 Concentraion(ppm) at 2050")
 
-    ## Warning: Removed 2165 rows containing non-finite values (stat_ecdf).
+    ## Warning: Removed 2146 rows containing non-finite values (stat_ecdf).
 
 ![](medium_post_files/figure-markdown_strict/unnamed-chunk-22-1.png)
 
@@ -435,6 +435,6 @@ Now, having the cumulative distribution, we could ask this question:
 
     cdf_co2_con_2050(460)
 
-    ## [1] 0.088839
+    ## [1] 0.088727
 
 As you can see, the answer is around 9%.
