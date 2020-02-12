@@ -103,13 +103,13 @@ Why customers churn and stop using a company's services? What is the estimate am
 
 <p align="center">
   <a href="https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Crono%20Virus">
-    <img alt="Customer Database Analysis1" title="Customer Database Analysis" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Crono%20Virus/crona_rmk_files/figure-markdown_strict/unnamed-chunk-18-1.png">
+    <img alt="Customer Database Analysis1" title="Customer Database Analysis" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Crono_Virus/crona_rmk_files/figure-markdown_strict/unnamed-chunk-18-1.png">
   </a>
 </p>
 
 <p align="center">
   <a href="https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Crono%20Virus">
-    <img alt="Customer Database Analysi2s" title="Customer Database Analysis" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Crono%20Virus/crona_rmk_files/figure-markdown_strict/unnamed-chunk-9-1.png">
+    <img alt="Customer Database Analysi2s" title="Customer Database Analysis" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Crono_Virus/crona_rmk_files/figure-markdown_strict/unnamed-chunk-9-1.png">
   </a>
 </p>
 Churn rate is one of the important business metrics. A company can compare its churn and growth rates to determine if there was overall growth or loss. When the churn rate is higher than the growth rate, the company has experienced a loss in its customer base.
