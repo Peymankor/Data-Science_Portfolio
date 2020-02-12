@@ -112,7 +112,7 @@ data_cc_sel_train <- data_cc_sel %>%
 
 Now, let's visulize the data first,
 
-```{r}
+```{r fig.width=10}
 ggplot(data_cc_sel,aes(Date, Co2_Con)) +
     geom_line(color='blue') +
     xlab("Year, Month") +
@@ -127,7 +127,7 @@ ggplot(data_cc_sel,aes(Date, Co2_Con)) +
 ```
 
 
-```{r}
+```{r fig.width=10, fig.height=10}
 p1 <- ggplot(data_cc_sel,aes(Date, Co2_Con)) +
     geom_line(color='blue') +
     xlab("Year, Month") +
