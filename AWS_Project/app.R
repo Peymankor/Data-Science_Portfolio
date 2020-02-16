@@ -9,9 +9,6 @@ library(bootstraplib)
 bs_theme_new(bootswatch = "sketchy")
 bs_theme_add_variables(`body-bg` = "#0A0909", `body-color` = "#F9C110", 
                        `input-border-color` = "#30BBE7", primary = "#39ACDB")
-#Sys.setenv("AWS_ACCESS_KEY_ID" = "AKIAJR5NC5GYMJ3Q6B6A",
-#          "AWS_SECRET_ACCESS_KEY" = "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",
-#         "AWS_DEFAULT_REGION" = "eu-north-1")
 
 
 get_bucket(bucket = 'norwayemission')
