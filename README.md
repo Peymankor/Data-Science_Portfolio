@@ -78,12 +78,15 @@ In this work a database is maed, the data is inserted into the datatables and th
 + Client and Transaction data are inserted to the tables.
 + Desired query is performed for example, total sale per company.
 
-## ARIMA modeling for Atmospheric CO2
+## Seasonal ARIMA modeling for Atmospheric CO2
 <p align="center">
-  <a href="https://github.com/KevinLiao159/MyDataSciencePortfolio/tree/master/medium_blogpost">
+  <a href="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Seasonal%20ARIMA%20Modeling/medium_post.md">
     <img alt="Medium Blogpost" title="Medium Blogpost" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Seasonal%20ARIMA%20Modeling/medium_post_files/figure-markdown_strict/unnamed-chunk-10-1.png">
   </a>
 </p>
+
+This project go through the Time Series Modeling for historical CO2 Concentration (1958–2019) in R. The Seasonal ARIMA modeling is used to build the model. Knowing that it has often been stated that the CO2 concentration should be attained below 460 ppm before the start of the second half of this century, specifically, this post seeks to answer this question:
+ + If the current trend in Co2 Concentration continues (Business as usual) what is the chance to reach 460 ppm at the beginning of the second half of the century?
 
 ## UNHCR Report
 
