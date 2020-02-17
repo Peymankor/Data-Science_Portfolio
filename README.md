@@ -72,11 +72,9 @@ This project to make model for Co2 concentration of Co2 from 1960-2019. Here, at
 
 The Model:
 
-\begin{align}
-\dot{x} & = \sigma(y-x) \\
-\dot{y} & = \rho x - y - xz \\
-\dot{z} & = -\beta z + xy
-\end{align}
+You can use $$\LaTeX$$ to typeset formulas. A formula can be displayed inline, e.g. $$e=mc^2$$, or as a block:
+$$\int_\Omega \nabla u \cdot \nabla v~dx = \int_\Omega fv~dx$$
+Also check out this [LaTeX introduction](https://en.wikibooks.org/wiki/LaTeX/Mathematics).
 
 ## ARIMA modeling for Atmospheric CO2
 <p align="center">
