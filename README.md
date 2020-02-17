@@ -68,6 +68,16 @@ This project consist the dataset of transaction of the costumer for the corporat
   </a>
 </p>
 
+This project to make model for Co2 concentration of Co2 from 1960-2019. Here, at this stage focused was made on the General linear Model to model the data. The harmonic linear model was used to model both increasing trend as well to take care of the seasonality of the data. Both the oridnary Least Sqaure and as well Weighted Least Square was used during the modeling process.
+
+The Model:
+
+\begin{align}
+\dot{x} & = \sigma(y-x) \\
+\dot{y} & = \rho x - y - xz \\
+\dot{z} & = -\beta z + xy
+\end{align}
+
 ## ARIMA modeling for Atmospheric CO2
 <p align="center">
   <a href="https://github.com/KevinLiao159/MyDataSciencePortfolio/tree/master/medium_blogpost">
