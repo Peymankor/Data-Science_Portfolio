@@ -13,18 +13,15 @@
 ## Table of Contents
 - [Introduction](#introduction)
 
-- [Customer Database](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Computational%20Tools%20for%20Data%20Analysis/Project%20%23%201/Project%201%20-%20Customer%20Database.ipynb)
+- [Customer Database](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/costumer_database/Customer_Database.ipynb)
 - [Custumer Sampling](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Computational%20Tools%20for%20Data%20Analysis/Project%20%23%202/Mandatory%20Assignment%202%20-%20Sampling%20Customers%20(2).ipynb)
-- [General Linear Model (GLM) for Atmospheric CO2](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Time%20Series%20Analysis/Project%20%23%201)
-- [ARMA Processes and Seasonal Processe](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Time%20Series%20Analysis/Project%20%23%202)
-- [ARIMA model atmospheric CO2](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Time%20Series%20Analysis/Project%20%23%203)
+- [General Linear Model (GLM) for Atmospheric CO2](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Least%20Square%20Trend%20Modeling/Project%231.Rmd)
+- [ARIMA model atmospheric CO2](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Seasonal%20ARIMA%20Modeling/medium_post.md)
 - [Kalman Filter](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Time%20Series%20Analysis/Project%20%23%204)
-- [The UN Refugee Council Project](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/UNHCR%20Report)
-- [New York City Bike Trips](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/New%20York%20City%20Bike%20Trips)
-- [Bayesian Neural Network](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/New%20York%20City%20Bike%20Trips)
-- [Coronavirus Analysis](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/New%20York%20City%20Bike%20Trips)
-- [Value of Information Analysis Dashboard](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/New%20York%20City%20Bike%20Trips)
-- [Probabilistic Reserve Evaluation Dashboard](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/New%20York%20City%20Bike%20Trips)
+- [The UN Refugee Council Project](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/UNHCR%20Report/Report.pdf)
+- [New York City Bike Trips](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/New_York_City_Bike_Trips/unacastanalysis.md)
+- [Bayesian Neural Network](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/BNN-Project/Deep_Learning_Project.pdf)
+- [Coronavirus Analysis](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Crono_Virus/crona_rmk.md)
 - [State Space Model](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/New%20York%20City%20Bike%20Trips)
 
 ## Introduction
