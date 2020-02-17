@@ -25,7 +25,7 @@
 - [Bayesian Neural Network](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/BNN-Project/Deep_Learning_Project.pdf)
 - [Leaf Classification](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Pytorch/6.1-EXE-Kaggle-Leaf-Challenge.ipynb)
 - [XGBoost Statistical Model](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/XGBOOST_Machine_Learning/xgboost.md)
-- [Amazon Web Service (S3 and Retrieval](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/XGBOOST_Machine_Learning/xgboost.md)
+- [Amazon Web Service (S3 and Retrieval)](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/XGBOOST_Machine_Learning/xgboost.md)
 - [Google Cloud Platform](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/XGBOOST_Machine_Learning/xgboost.md)
 - [Racing Bar Plot](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Racing_Bar_Plot/NPDdata_anim_22_1.gif)
 
