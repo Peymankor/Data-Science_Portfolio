@@ -41,16 +41,17 @@ Welcome to my awesome data science project portfolio. In my repo, you can find a
 
 My project collection covers various Data Science and Machine Learning applications such as *Deep Learning*, *Data Cleaning, Processing and Visulization*, and *Dashboarding*. There are more to come. I will try my best to bing my curreny projects here so that it could provide the comprehensive hands-on practices for interested people in data analytics community.
 
-## Customer Database
+## Customer Data Processing
+dasdsadada
 
 <p align="center">
-  <a href="https://github.com/Peymankor/Data-Science_Portfolio/tree/master/costumer%20database">
+  <a href="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/costumer_database/Customer_Database.ipynb">
     <img alt="Customer Database Analysis" title="Customer Database Analysis" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/costumer_database/project1_1.png">
   </a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/Peymankor/Data-Science_Portfolio/tree/master/costumer%20database">
+  <a href="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/costumer_database/Customer_Database.ipynb">
     <img alt="Customer Database Analysis" title="Customer Database Analysis" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/costumer_database/project1_2.png">
   </a>
 </p>
