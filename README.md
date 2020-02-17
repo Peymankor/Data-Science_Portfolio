@@ -20,7 +20,7 @@
 - [General Linear Model (GLM) for Atmospheric CO2](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Least%20Square%20Trend%20Modeling/Project%231.Rmd)
 - [ARIMA model atmospheric CO2](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Seasonal%20ARIMA%20Modeling/medium_post.md)
 - [Kalman Filter](https://github.com/Peymankor/Data-Science_Portfolio/tree/master/Time%20Series%20Analysis/Project%20%23%204)
-- [The UN Refugee Council Project](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/UNHCR%20Report/Report.pdf)
+- [The UN Refugee Council Project](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/UNHCR%20Report/Report.md)
 - [New York City Bike Trips](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/New_York_City_Bike_Trips/unacastanalysis.md)
 - [Bayesian Neural Network](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/BNN-Project/Deep_Learning_Project.pdf)
 - [Coronavirus Analysis](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Crono_Virus/crona_rmk.md)
@@ -91,32 +91,42 @@ This project go through the Time Series Modeling for historical CO2 Concentratio
 ## UNHCR Report
 
 <p align="center">
-  <a href="https://github.com/Peymankor/Data-Science_Portfolio/tree/master/costumer%20database">
+  <a href="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/UNHCR%20Report/Report.md">
     <img alt="Customer Database Analysis" title="Customer Database Analysis" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/UNHCR%20Report/Report_files/figure-markdown_strict/unnamed-chunk-17-1.png">
   </a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/Peymankor/Data-Science_Portfolio/tree/master/costumer%20database">
+  <a href="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/UNHCR%20Report/Report.md">
     <img alt="Customer Database Analysis" title="Customer Database Analysis" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/UNHCR%20Report/Report_files/figure-markdown_strict/unnamed-chunk-8-1.png">
   </a>
 </p>
 
-Churn rate is one of the important business metrics. A company can compare its churn and growth rates to determine if there was overall growth or loss. When the churn rate is higher than the growth rate, the company has experienced a loss in its customer base.
+In this work the data of United Refugee Agency is used to analysie the afghan refueeges and asylum seekers over last 40 years and specifically, given the data, the report tries to answer the following questions:
 
-Why customers churn and stop using a company's services? What is the estimate amount of churn for next quarter? Being able to answer above two questions can provide meaningful insights about what direction the company is currently heading towards and how the company can improve its products and services so that constomers would stay. 
++ Which countries host the most Afghan refugees and asylum seekers? Create a plot of the Top 10 and a plot of the Top 5 countries with the biggest increase from 2017 to 2018. Where did you find the data and how did you decide to visualize it?
+
++ Is there a relationship between the number of Afghan refugees and asylum seekers in a country and the distance between that country and Afghanistan?
+
++ Visualize for the last 10 years: total number of refugees and asylum seekers from Afghanistan together with the number of internally displaced from Afghanistan.
+
 
 ## New York City Bike Trip Analysis
 
 <p align="center">
-  <a href="https://github.com/Peymankor/Data-Science_Portfolio/tree/master/costumer%20database">
+  <a href="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/New_York_City_Bike_Trips/unacastanalysis.md">
     <img alt="Customer Database Analysis" title="Customer Database Analysis" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/New_York_City_Bike_Trips/unacastanalysis_files/figure-markdown_strict/unnamed-chunk-18-1.png">
   </a>
 </p>
 
-Churn rate is one of the important business metrics. A company can compare its churn and growth rates to determine if there was overall growth or loss. When the churn rate is higher than the growth rate, the company has experienced a loss in its customer base.
+This project revolves around doing some analysis of the NYC City Bike dataset. The data could be accessed from thr: [https://console.cloud.google.com/marketplace/details/city-of-new-york/nyc-citi-bike]
 
-Why customers churn and stop using a company's services? What is the estimate amount of churn for next quarter? Being able to answer above two questions can provide meaningful insights about what direction the company is currently heading towards and how the company can improve its products and services so that constomers would stay. 
+Using the Google Platform Cloud the following questions are answered:
+
++ What is the trip duration distribution of Citibike trips?
++ What is the most popular Citibike trip?
++ Were there new bike stations introduced or removed at any point in time? What makes you think it were or weren't?
+
 
 
 ## CORONA VIRUS ANLYSIS
