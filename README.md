@@ -23,12 +23,9 @@
 - [The UN Refugee Council Project](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/UNHCR%20Report/Report.md)
 - [New York City Bike Trips](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/New_York_City_Bike_Trips/unacastanalysis.md)
 - [Bayesian Neural Network](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/BNN-Project/Deep_Learning_Project.pdf)
-- [Coronavirus Analysis](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Crono_Virus/crona_rmk.md)
 - [Leaf Classification](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Pytorch/6.1-EXE-Kaggle-Leaf-Challenge.ipynb)
 - [XGBoost Statistical Model](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/XGBOOST_Machine_Learning/xgboost.md)
 - [Amazon Web Service (S3 and Retrieval](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/XGBOOST_Machine_Learning/xgboost.md)
-- [XGBoost Statistical Model](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/XGBOOST_Machine_Learning/xgboost.md)
-- [Amazon Web Service (S3 and Retrieval) ](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/XGBOOST_Machine_Learning/xgboost.md)
 - [Google Cloud Platform](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/XGBOOST_Machine_Learning/xgboost.md)
 - [Racing Bar Plot](https://github.com/Peymankor/Data-Science_Portfolio/blob/master/Racing_Bar_Plot/NPDdata_anim_22_1.gif)
 
