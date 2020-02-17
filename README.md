@@ -55,9 +55,11 @@ My project collection covers various Data Science and Machine Learning applicati
     <img alt="Customer Database Analysis" title="Customer Database Analysis" src="https://github.com/Peymankor/Data-Science_Portfolio/blob/master/costumer_database/project1_2.png">
   </a>
 </p>
-Churn rate is one of the important business metrics. A company can compare its churn and growth rates to determine if there was overall growth or loss. When the churn rate is higher than the growth rate, the company has experienced a loss in its customer base.
+This project consist the dataset of transaction of the costumer for the corporation over the years. The data table consist of the date of transaction, the company of costumer, the city, country of the costumer. The data includes around 20000 transaction of the corportaion with six columns. The objective of this project is:
 
-Why customers churn and stop using a company's services? What is the estimate amount of churn for next quarter? Being able to answer above two questions can provide meaningful insights about what direction the company is currently heading towards and how the company can improve its products and services so that constomers would stay. 
++ Cleaning and Processing the Data to the Clean Data
++ Enriching the Columns for Better Analysis
++ Building the SQL DataBase
 
 ## General Linear Model (GLM) for Atmospheric CO2
 <p align="center">
