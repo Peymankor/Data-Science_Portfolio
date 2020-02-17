@@ -70,9 +70,13 @@ This project consist the dataset of transaction of the costumer for the corporat
 
 This project to make model for Co2 concentration of Co2 from 1960-2019. Here, at this stage focused was made on the General linear Model to model the data. The harmonic linear model was used to model both increasing trend as well to take care of the seasonality of the data. Both the oridnary Least Sqaure and as well Weighted Least Square was used during the modeling process.
 
-The Model:
-<img src="https://render.githubusercontent.com/render/math?math=\alpha + \beta_{t}t + \beta_{s}sin(2*pi*t/p) + \beta_{c}cos(2*pi*t/p) + \epsilon_{t}">
+## Database Management for Costumer Purchases
 
+In this work a database is maed, the data is inserted into the datatables and the qurying the tables are shown. The sqlite3 library is used for working with database. The following steps rae taken to conduct this projects:
++ Data in dataframe fromat is imported
++ Connection with datatable is made and then two seperat tables known as clients and transactin tables are created.
++ Client and Transaction data are inserted to the tables.
++ Desired query is performed for example, total sale per company.
 
 ## ARIMA modeling for Atmospheric CO2
 <p align="center">
