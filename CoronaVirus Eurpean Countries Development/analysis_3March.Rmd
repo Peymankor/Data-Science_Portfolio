@@ -1,17 +1,57 @@
 ---
-title: "Modeling_Visualization"
-author: "Peyman Kor"
-date: "3/13/2020"
-output: html_document
+title: "Data Processing and Visulization of  of COVID-19 Outbreak in EU Countries"
+date: "`r format(Sys.time(), '%d %b %Y')`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: false
+    css: "COVID-19-IT.css"
 ---
 
+# Package Initialization
 
-```{r}
-library(tidyverse)
-#devtools::install_github("RamiKrispin/coronavirus")
-library(coronavirus)
-data("coronavirus")
+Here, we use the the *Coronavirus* package develpped and maintained with *Rami Krispin* at this link:
+
+https://github.com/RamiKrispin/coronavirus
+
+In addition, the *Tidyverse* package also was needed to manipulate and viulize the data.
+
+```{r warning=FALSE, include=FALSE}
+# Install the coronavirus package
+
+if ("coronavirus" %in% rownames(installed.packages()))
+{
+  library(coronavirus)
+  data("coronavirus")
+} else {
+  devtools::install_github("RamiKrispin/coronavirus")
+  library(coronavirus)
+  data("coronavirus")
+}
+
+# Install the Tidyverse package
+
+if ("tidyverse" %in% rownames(installed.packages()))
+{
+  library(tidyverse)
+} else {
+  install.packages("tidyverse")
+  library(tidyverse)
+}
 ```
+
+
+# Data Manupilation
+
+Here, the dplyr was used to selcet the following countries:
++ Italy
++ Soth Korea
++ France
++ Denmark
++ Norway
++ Sweden
+
+Then, we caculated the sum of the whole confirmed cases until the given time. In addition, the "row_number" was added to find the days after the Corona Cases has been reached above 25 cases.
 
 
 ```{r}
@@ -28,6 +68,9 @@ eu_cases <- coronavirus %>%
   filter(id < 22)
 ```
 
+# Mutating Countries Population to the Data
+
+Here, the population of the countries were found and corrosponding population was added to the column "pop" in the dataset.
 
 ```{r}
 populations <- c(81.16, 82.79, 60.48, 51.47, 66.44, 5.6, 5.36, 1386, 67, 10 )
@@ -42,7 +85,9 @@ for (i in 1:length(eu_cases$Country.Region)) {
 }  
 ```
 
-Great thanks to Cedric Scherer (cedricphilippscherer@gmail.com) for his beatiful theme!
+# ggplot Theme
+
+Great thanks to Cedric Scherer (cedricphilippscherer@gmail.com) for his beatiful theme!, this theme was used as the theme of the ggplot in the bottom
 
 ```{r}
 source(here::here("theme", "tidy_grey.R"))
@@ -57,6 +102,9 @@ windowsFonts("Roboto Mono" = windowsFont("Roboto Mono"))
 windowsFonts("Poppins" = windowsFont("Poppins"))
 ```
 
+# Plot Size Modification
+
+Here, we use the costum edit in order to plot the ggplot output in the longer format than the defult. 
 
 ```{r setup, include=FALSE}
 library(knitr)
@@ -71,6 +119,8 @@ opts_chunk$set(fig.align = "center",
 
 ```
 
+
+# Visulization:
 
 ```{r}
 eu_cases <- eu_cases %>% mutate(tot_confirmed_per = tot_confirmed/pop)
