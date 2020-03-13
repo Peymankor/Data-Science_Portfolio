@@ -1,0 +1,105 @@
+---
+title: "Modeling_Visualization"
+author: "Peyman Kor"
+date: "3/13/2020"
+output: html_document
+---
+
+
+```{r}
+library(tidyverse)
+#devtools::install_github("RamiKrispin/coronavirus")
+library(coronavirus)
+data("coronavirus")
+```
+
+
+```{r}
+eu_cases <- coronavirus %>% 
+  group_by(Country.Region, date) %>% 
+  summarise(Cases=sum(cases)) %>% 
+  filter(Country.Region== "Italy" | Country.Region== "Korea, South" | Country.Region== "France" | Country.Region== "Denmark" | 
+           Country.Region== "Norway" |
+           Country.Region=="Sweden") %>%
+  group_by(Country.Region) %>% 
+  mutate(tot_confirmed = cumsum(Cases)) %>% 
+  filter(Cases > 25) %>% 
+  mutate(id = row_number()) %>% 
+  filter(id < 22)
+```
+
+
+```{r}
+populations <- c(81.16, 82.79, 60.48, 51.47, 66.44, 5.6, 5.36, 1386, 67, 10 )
+names(populations) <- c("Iran", "Germany", "Italy",  "Korea, South" 
+                        ,"UK", "Denmark", "Norway" ,"Mainland China", "France", "Sweden")
+
+eu_cases$pop <- rep(0,length(eu_cases$Country.Region))
+
+for (i in 1:length(eu_cases$Country.Region)) {
+  country <- as.character(eu_cases$Country.Region[i])
+  eu_cases$pop[i] <- populations[[country]]
+}  
+```
+
+Great thanks to Cedric Scherer (cedricphilippscherer@gmail.com) for his beatiful theme!
+
+```{r}
+source(here::here("theme", "tidy_grey.R"))
+```
+
+
+If you are using the windows, you must install the following the fonts Poppins and Roboto Mono and then:
+
+
+```{r}
+windowsFonts("Roboto Mono" = windowsFont("Roboto Mono"))
+windowsFonts("Poppins" = windowsFont("Poppins"))
+```
+
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(fig.align = "center",
+               fig.width = 10, fig.height = 14,
+               dev.args = list(pointsize=10),
+               out.width = "90%", dpi = 300,
+               cache = FALSE,
+               par = TRUE, # needed for setting hook 
+               collapse = TRUE, # collapse input & ouput code in chunks
+               warning = FALSE, message = FALSE)
+
+```
+
+
+```{r}
+eu_cases <- eu_cases %>% mutate(tot_confirmed_per = tot_confirmed/pop)
+
+eu_cases$Country.Region = factor(eu_cases$Country.Region, 
+                              levels=c("Italy", "Korea, South","Norway","France" ,"Denmark" 
+                                        ,"Sweden"))
+
+ggplot(eu_cases, aes(id, tot_confirmed_per, fill = Country.Region)) +
+    geom_area() +
+    geom_area(alpha = 0.75) +
+    facet_wrap(~ Country.Region, nrow = 4) + 
+    theme(legend.position = "none",
+          plot.title = element_text(size=12),
+          axis.title = element_text(size = 12, face = "plain"),
+          axis.title.x = element_text(size = 12, face = "plain"),
+          axis.title.y = element_text(size = 12, face = "plain"),
+          axis.text = element_text(family = "Roboto Mono", size = 8.5),
+          axis.ticks.x = element_line(colour = "grey40", size = 1),
+          axis.ticks.y = element_line(colour = "transparent", size = 0.3),
+          panel.grid.major.y = element_line(colour = "grey40", size = 0.3),
+          panel.border = element_blank(),
+          strip.background = element_rect(color = "transparent"),
+          strip.text = element_text(size = 13, colour = "white"),
+          panel.spacing = unit(15, "pt")) +
+  scale_x_continuous(limits = c(1, 21)) +
+    labs(x = "Days after Totoal Confirmed Caes > 25", y = "Total Cases Per Million Inhabitants\n", 
+         title = "Development of Total Confirmed Cases\nPer Million inhabitants",
+         caption = "\nVisualization by Peyman Kor  |  Data source: JHU & WHO")
+
+```
+
